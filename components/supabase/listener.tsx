@@ -1,14 +1,12 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSupabase } from "libs/supabase";
 
 export default function SupabaseListener({ serverAccessToken }: any) {
   const { supabase } = useSupabase();
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParam = useSearchParams();
 
   useEffect(() => {
     const {
@@ -25,7 +23,7 @@ export default function SupabaseListener({ serverAccessToken }: any) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [serverAccessToken, router, supabase, pathname, searchParam]);
+  }, [serverAccessToken, router, supabase]);
 
   return null;
 }
