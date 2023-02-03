@@ -1,17 +1,36 @@
+import "server-only";
 import "./globals.css";
 
-import { Inter } from "@next/font/google";
+import SupabaseProvider from "components/supabase/provider";
+import SupabaseListener from "components/supabase/listener";
 
-const inter = Inter({
+import { Nunito } from "@next/font/google";
+import { createClient } from "libs/supabase/server";
+
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-nunito",
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const supabase = createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
+    <html lang="en" className={`${nunito.variable} h-full`}>
       <head />
-      <body className="h-full bg-[#FDFDFC]">{children}</body>
+      <body className="h-full">
+        <SupabaseProvider session={session}>
+          <SupabaseListener serverAccessToken={session?.access_token} />
+          {children}
+        </SupabaseProvider>
+      </body>
     </html>
   );
-}
+};
+
+// do not cache this layout
+export const revalidate = 0;
+export default RootLayout;

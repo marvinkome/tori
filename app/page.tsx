@@ -1,51 +1,22 @@
-import Logo from "./components/logo";
-import { Card } from "./components/card";
-import { Calendar, Day } from "./components/calendar";
+import { createClient } from "@/libs/supabase/server";
+import AuthForm from "./components/auth-form";
 
-export default function Page() {
+const Page = async () => {
+  const supabase = createClient();
+  const { data } = await supabase.auth.getSession();
+
   return (
-    <main className="h-full relative flex flex-col">
-      <header className="flex items-baseline px-14 py-6 space-x-2">
-        <h1 className="text-2xl font-medium text-neutral-700">Marvin Kome</h1>
-        <p className="text-sm text-neutral-400">A couple of things about me</p>
-      </header>
+    <div className="h-full w-screen flex flex-col items-center justify-center m-0 bg-gradient-to-r from-sky-500 to-indigo-500">
+      <div className="w-[28rem] max-w-full px-6">
+        <div className="bg-white shadow-2xl px-6 py-6 rounded-lg">
+          <h2 className="text-2xl font-bold mb-1">Hey, Welcome to Tori 👋</h2>
+          <p className="text-[rgb(0_0_0/55%)]">Use your email or google account to continue</p>
 
-      <main className="grow">
-        <Calendar>
-          <Day date="Oct 21">
-            <Card color="blue" title="Surf Curse concert was amazing!!" date="21 October" />
-            <Card color="green" title="Awaiting vacations" date="14 December" />
-          </Day>
-
-          <Day date="Nov 20">
-            <Card color="purple" title="Finally seeing Still Woozy" date="20 November" />
-            <Card color="yellow" title="Still Woozy Jpengs" date="20 November" />
-          </Day>
-
-          <Day date="Nov 26">
-            <Card color="orange" title="Happy birthday Sophia 🎉🥳" date="26 November" />
-            <Card color="green" title="Merry Christmas" date="25 December" />
-          </Day>
-
-          <Day date="Dec 31">
-            <Card color="red" title="Some progress made on this" date="3 January" />
-            <Card color="purple2" title="Playing with Procreate" date="14 January" />
-          </Day>
-
-          <Day date="Jan 2">
-            <Card color="orange" title="Thinking about how to make the next year in review better 🤔" date="31 December" />
-          </Day>
-        </Calendar>
-      </main>
-
-      <footer className="absolute bottom-0 mt-auto flex px-5 py-2 items-center space-x-2">
-        <div className="inline-flex items-center space-x-2">
-          <Logo className="w-[40px] mt-[-4px] text-neutral-700" />
-          <p className="text-sm text-neutral-400">Made with Recit</p>
+          {data.session ? <p>Is logged In</p> : <AuthForm />}
         </div>
-        <span>-</span>
-        <button className="text-sm text-neutral-400">Join the waiting list</button>
-      </footer>
-    </main>
+      </div>
+    </div>
   );
-}
+};
+
+export default Page;
