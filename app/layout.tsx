@@ -4,12 +4,16 @@ import "./globals.css";
 import SupabaseProvider from "components/supabase/provider";
 import SupabaseListener from "components/supabase/listener";
 
-import { Nunito } from "@next/font/google";
+import { Nunito, Inter } from "@next/font/google";
 import { createClient } from "libs/supabase/server";
 
 const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-nunito",
+});
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -19,7 +23,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   } = await supabase.auth.getSession();
 
   return (
-    <html lang="en" className={`${nunito.variable} h-full`}>
+    <html lang="en" className={`${nunito.variable} ${inter.variable} h-full`}>
       <head />
       <body className="h-full">
         <SupabaseProvider session={session}>
@@ -31,6 +35,4 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// do not cache this layout
-export const revalidate = 0;
 export default RootLayout;
