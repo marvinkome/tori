@@ -105,12 +105,10 @@ const CardForm = ({ values, setValue }: any) => {
               className={cn(
                 "inline-flex items-center border px-4 py-2 rounded-md",
                 {
-                  "bg-blue-100 border-blue-700 hover:border-blue-800 active:bg-blue-200":
-                    values.contentType === "stories",
+                  "bg-blue-100 border-blue-700 hover:border-blue-800 active:bg-blue-200": values.contentType === "stories",
                 },
                 {
-                  "border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100":
-                    values.contentType !== "stories",
+                  "border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100": values.contentType !== "stories",
                 }
               )}
             >
@@ -123,12 +121,10 @@ const CardForm = ({ values, setValue }: any) => {
               className={cn(
                 "inline-flex items-center border px-4 py-2 rounded-md",
                 {
-                  "bg-blue-100 border-blue-700 hover:border-blue-800 active:bg-blue-200":
-                    values.contentType === "gallery",
+                  "bg-blue-100 border-blue-700 hover:border-blue-800 active:bg-blue-200": values.contentType === "gallery",
                 },
                 {
-                  "border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100":
-                    values.contentType !== "gallery",
+                  "border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100": values.contentType !== "gallery",
                 }
               )}
             >
@@ -141,12 +137,10 @@ const CardForm = ({ values, setValue }: any) => {
               className={cn(
                 "inline-flex items-center border px-4 py-2 rounded-md",
                 {
-                  "bg-blue-100 border-blue-700 hover:border-blue-800 active:bg-blue-200":
-                    values.contentType === "spotify",
+                  "bg-blue-100 border-blue-700 hover:border-blue-800 active:bg-blue-200": values.contentType === "spotify",
                 },
                 {
-                  "border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100":
-                    values.contentType !== "spotify",
+                  "border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100": values.contentType !== "spotify",
                 }
               )}
             >
@@ -169,9 +163,16 @@ const StoriesEditor = () => {
         <p>Add story</p>
       </div>
 
-      <div className="px-4 py-4 space-y-5">
-        <div className="h-full">
-          <button>Select picture from</button>
+      <div className="px-4 py-4 space-y-5 h-[350px]">
+        {/* <div className="h-full w-full flex flex-col items-center justify-center">
+          <p className="mb-2">Select photos and videos</p>
+          <button className="inline-flex rounded-md px-4 py-1 font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800">
+            Select photo
+          </button>
+        </div> */}
+
+        <div className="h-full w-full">
+          <img alt="story-1" src="/story-1.jpg" className="w-full h-full" />
         </div>
       </div>
     </div>
@@ -179,20 +180,15 @@ const StoriesEditor = () => {
 };
 
 const Onboarding = () => {
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [color, setColor] = useState("blue");
-  const [contentType, setContentType] = useState<string>();
-
   return (
     <div className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="bg-white w-full max-w-md rounded-xl">
           {/* <CardForm values={{}} setValue={(v) => null} /> */}
-          {/*  */}
+          <StoriesEditor />
 
-          <div className="w-full text-center pt-2">
+          <div className="w-full text-center py-2 px-4">
             <button className="w-full inline-flex items-center justify-center rounded-md px-4 py-2 font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800">
               Continue
             </button>
