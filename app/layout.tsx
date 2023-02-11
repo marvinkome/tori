@@ -4,12 +4,13 @@ import "./globals.css";
 import SupabaseProvider from "components/supabase/provider";
 import SupabaseListener from "components/supabase/listener";
 
-import { Nunito, Inter } from "@next/font/google";
+import { Fraunces, Inter } from "@next/font/google";
 import { createClient } from "libs/supabase/server";
 
-const nunito = Nunito({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-nunito",
+  axes: ["SOFT", "opsz"],
+  variable: "--font-fraunces",
 });
 const inter = Inter({
   subsets: ["latin"],
@@ -23,7 +24,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   } = await supabase.auth.getSession();
 
   return (
-    <html lang="en" className={`${nunito.variable} ${inter.variable} h-full`}>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
       <head />
       <body className="h-full">
         <SupabaseProvider session={session}>

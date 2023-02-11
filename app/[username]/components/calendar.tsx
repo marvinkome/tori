@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-export const Calendar = ({ children }: any) => {
+const Calendar = ({ children }: { children: React.ReactNode }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -23,7 +23,19 @@ export const Calendar = ({ children }: any) => {
 
   return (
     <div ref={containerRef} className="relative w-full h-full overflow-y-hidden overflow-x-auto [&::-webkit-scrollbar]:hidden">
-      <div className="absolute h-full left-0 flex">{children}</div>
+      <div className="absolute h-full left-0 flex">
+        {React.Children.count(children)
+          ? children
+          : Array.from({ length: 5 }).map((_, idx) => (
+              <section key={idx} className="w-[60vw] sm:w-[40vw] md:w-[20vw] h-full flex flex-col">
+                <article className="w-full h-full grow p-3">
+                  <div className="animate-pulse rounded-md h-full bg-[rgb(251_251_251)]" />
+                </article>
+              </section>
+            ))}
+      </div>
     </div>
   );
 };
+
+export default Calendar;

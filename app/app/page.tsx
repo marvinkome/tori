@@ -13,15 +13,6 @@ export default function Page() {
       <main className="grow">
         <Calendar>{/*  */}</Calendar>
       </main>
-
-      <footer className="absolute bottom-0 mt-auto flex px-5 py-2 items-center space-x-2">
-        <div className="inline-flex items-center space-x-2">
-          <Logo className="w-[40px] mt-[-4px] text-neutral-700" />
-          <p className="text-sm text-neutral-400">Made with Recit</p>
-        </div>
-        <span>-</span>
-        <button className="text-sm text-neutral-400">Join the waiting list</button>
-      </footer>
     </main>
   );
 }

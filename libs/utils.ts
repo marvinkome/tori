@@ -11,3 +11,37 @@ export const getBaseURL = () => {
   url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
   return url;
 };
+
+export const pausableTimeout = (callback: () => void, timeout: number) => {
+  let initialTime = Date.now();
+  let remaining = timeout;
+  let timerId: any = null;
+
+  const resume = () => {
+    if (timerId) return;
+
+    initialTime = Date.now();
+    timerId = window.setTimeout(callback, remaining);
+  };
+
+  const pause = () => {
+    if (!timerId) return;
+
+    clearTimeout(timerId);
+
+    timerId = null;
+    remaining -= Date.now() - initialTime;
+  };
+
+  const clear = () => {
+    if (!timerId) return;
+    clearTimeout(timerId);
+  };
+
+  resume();
+  return {
+    pause,
+    resume,
+    clear,
+  };
+};

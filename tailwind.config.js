@@ -1,3 +1,5 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,8 +11,18 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)"],
-        inter: ["var(--font-inter)"],
+        sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
+        serif: ["var(--font-fraunces)", ...defaultTheme.fontFamily.serif],
+      },
+      keyframes: {
+        "story-indicator": {
+          "0%": {
+            width: "0%",
+          },
+          "100%": {
+            width: "100%",
+          },
+        },
       },
     },
   },

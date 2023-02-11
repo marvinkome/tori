@@ -2,3 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .font-serif-variation {
+    font-variation-settings: "opsz" 72,"SOFT" 50;
+    letter-spacing: -.03em;
+  }
+}
