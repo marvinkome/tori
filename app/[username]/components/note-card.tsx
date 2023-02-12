@@ -1,7 +1,14 @@
 import dayjs from "dayjs";
 import cn from "classnames";
+import { getTagColorClasses } from "./utils";
 
-const NoteCard = ({ title, date, className }: { title: string; date: string; className?: string }) => {
+type NoteCardProps = {
+  title: string;
+  date: string;
+  tag?: { name: string; color: string };
+  className?: string;
+};
+const NoteCard = ({ title, date, tag, className }: NoteCardProps) => {
   return (
     <div
       className={cn(
@@ -10,8 +17,12 @@ const NoteCard = ({ title, date, className }: { title: string; date: string; cla
         className
       )}
     >
-      <h3 className="font-serif text-2xl font-light mb-1 font-serif-variation">{title}</h3>
-      <p className="text-sm text-neutral-400 font-light">{dayjs(date).format("DD MMM")}</p>
+      <div>
+        <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
+        <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
+
+        {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>{tag.name}</p>}
+      </div>
     </div>
   );
 };

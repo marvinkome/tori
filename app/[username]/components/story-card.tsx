@@ -7,6 +7,7 @@ import { pausableTimeout } from "libs/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useMedia } from "react-use";
+import { getTagColorClasses } from "./utils";
 
 const swipeConfidenceThreshold = 1000;
 const swipePower = (offset: number, velocity: number) => {
@@ -162,6 +163,7 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
 type StoryCardProps = {
   title: string;
   date: string;
+  tag?: { name: string; color: string };
   className?: string;
   stories: {
     title?: string;
@@ -169,7 +171,7 @@ type StoryCardProps = {
     image: string;
   }[];
 };
-const StoryCard = ({ title, date, stories, className }: StoryCardProps) => {
+const StoryCard = ({ title, date, tag, stories, className }: StoryCardProps) => {
   const contentEl = useRef<HTMLDivElement>(null);
 
   const [rootElement, setRootElement] = useState<HTMLDivElement | null>(null);
@@ -211,8 +213,19 @@ const StoryCard = ({ title, date, stories, className }: StoryCardProps) => {
           className
         )}
       >
-        <h3 className="font-serif text-2xl font-light mb-1 font-serif-variation">{title}</h3>
-        <p className="text-sm text-neutral-400 font-light">{dayjs(date).format("DD MMM")}</p>
+        <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
+        <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
+
+        {tag && (
+          <p
+            className={cn(
+              "bg-orange-400/40 text-orange-900 text-xs px-1.5 py-1.5 inline-block rounded shadow",
+              getTagColorClasses(tag.color)
+            )}
+          >
+            {tag.name}
+          </p>
+        )}
       </div>
 
       {isActive && (

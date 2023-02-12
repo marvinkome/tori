@@ -3,6 +3,10 @@ const data = [
     type: "gallery" as const,
     title: "Peach Pit. My first concert ever",
     date: "2022-05-28",
+    tag: {
+      name: "#concerts",
+      color: "lime",
+    },
     images: [
       "https://lh3.googleusercontent.com/pw/AMWts8DcseMKVHk6OirJRN7V3sGIv5gHjGmOMAe_oD4FKBR4O95rJ8H5ctCtkxuEwS6aaweAekg2QKxtSMZPbm6k7MeMT4G8t8u4OX3Jw3uJKIYRDI1y_5_ne87qiOHcwnBlqKlvnWO3ywsa-Rwe1q_syG2opQ=w1350-h1800-no",
       "https://lh3.googleusercontent.com/qhTBROKTFoXdc9P9JOieSr1Ndf73VI_aMyavffPqGKeJU_CUTtXQIGVbQb-3r6HTjxht2kIlUAyP9uT07p6majwGas09RburWIuIISn2rElTzi8rV0Nnr83EN6Y2ZlMSirwhp01uH-SuK_cqjZn9263vuTkQb40Q8jIRpa7rLZtcfhFOTd7aKnQIQ1c4gFBGLNzperPvFiZJaUhJ2LDuXZAslcovLNk74u759WnBrERjMsxV3VkBzo4L_1jwnv6zOq2nN1a-6F3msm5T-0VcWFG28QndKioorDNWAbJzRaOy5lXWLFVi2-h9IdFGGCBMLP0J0ol-1MThjy33zPC5tnMFu--r0MPV2Xwj05BIJGXnUUkJr4Je3-HL3spoTXzHHpQHk1NbgO5uupMZx1GLm4FI2y4BW5nQkE3PIOxi3G8aU1WMQboM0X91hFJxKu7fVyf2VIEhNR8oS3hRnulkgqYpttNU3w-hUHlGCicGiiOJhDYHZ8LnqiFd8tJjDi-ZW8AEi_Imv3DREN2d9cIPypDtB0sUlaCY9ZJd3ShMF0axrXZZvD9ckQxuwA-O4uOUBvdeiGmB85pVAMQKezINKX-2_HTAFdHXiKNh1RECO3eGQ-Q2q_uLqPd83L14GjxZwoMDnHqwqA8WIEhcaf4KVSQqHNZJyIJrugvl-1fV8jUd2PYuIWzAHU-JZ3fgJk4Tj1X4PAJCGSYq4ZiMfTR4oPmpboO4XhxCH0anpXWm6b76DHc6jwhuFthUUVxo9JTO6avi9Ew7ZIzRKM_p2NzJMuIoghrIIOB5_86PTnckd_YTl0kX5PBas5P4GJjN2MFFfnKtvs1xkcmcSId-k9bM3rA6w-aNMz-VKhFJWZQIt2rU4yy4-YxYTPUPCxiw7G0sFkcW7ORpvKYbhWJLFPe9jbBzFPOgvIsppm6VQb41kOhiE5F5nPvChZNnO8lFL_4rIZuvocB9wx2am02TBjSe=w1350-h1800-no",
@@ -14,11 +18,19 @@ const data = [
     type: "note" as const,
     title: "Treat users as investors",
     date: "2022-06-28",
+    tag: {
+      name: "#thoughts",
+      color: "purple",
+    },
   },
   {
     type: "story" as const,
     title: "Trip to Barcelona",
     date: "2022-07-08",
+    tag: {
+      name: "#trips",
+      color: "blue",
+    },
     stories: [
       {
         content: "Really stressfull flight, bags got delayed and we got in by 1am. Looking back it was fun though",
@@ -47,6 +59,10 @@ const data = [
     type: "gallery" as const,
     title: "Some Barcelona JPENGs",
     date: "2022-07-08",
+    tag: {
+      name: "#trips",
+      color: "blue",
+    },
     images: [
       "https://lh3.googleusercontent.com/_iaj7-KNJmADj_zjJ7rcMeKxTjqxuRj3ONzJ1VLJh48P-7sZyIlPnw95-eQK4d8M6MVTJweCWae1UBEb50dYG-r_3rgO64rvTytJS_v1suI-vpCOB840mubA8iPbf0Vus7SsHNRlz3ecELenUvvopgOsjjTXhuBGqF6QJzhmMRP99Oq1dLtzXWW1PC43s1WSI8dykgJ4E0JRn45TuyeqnSA-eGQgTjlBiBwZhG7y9WiAIJpbzaGx7FZx5ZcXhordj8-dy7XiwWN8HN8JzT8475V1H8riCCHxgjmKz1oqq3kMg101KGNqHWzLCGLOAO-nBLhw1sLUA2_hY5H5nYLsamlSu4t0txKEPCQWYJ3JC-n5ct8B0xmccFf1oNQnbrtS8X9GG6jzYCHrWpZEJuiJVDSTFg8q-Bzpi7kbkinFsGlJ1gZxZFk4NxLsi-bckX1XcSNOEW9s0ClF9zeuGYR5IvDAh4RrUKh4g0AI8rLXgTeOoi6qQyL9ZPa4_7qK3Bm7PM2I9WSc2iUgmxrOQXoCAi-sZGp7-7j9Xn1fFrFM6s6Toli-g5MbP17yNNGdUV7yG_NklMwN7MMY7CI-Re-21KPijlixK0YT_XcTaSoTHubY6suqNlApBQS3MWzf7NDj1W79lsqsDkoyjRNLqEs1W8skWKMeCGZwViDTHaWcaWboozGuPHhyGSnrmWEhD2EphSMH6epBoQq8jVyC8mG0XyAX1DlZgVj1Q6cA3y3r8OiiPpb2zUPpYrzXRU1b1RJIhvOZcrQNwEnnveIga91tnT9qKJcUs8LQvEv8dQgHHsf-jx3lDrCzK3v9WD-fPvCI_k_BF_zH9OWq9zNTJHEStjUVNmWxu3c5zvWK_1Yx_05Bb2XTeMu-p83Mm2Jnse01TZ6oxqw90cQDS8hPGk81ZTRg1_pAsEAKrcM9fE509SlHcIfnFpj4AqkPX5133zD1Mt29kHAl2hDd5wkcH2mX=w158-h210-no",
       "https://lh3.googleusercontent.com/22-NEf625oP2ma60H_EuKvE8tBccq3mNUZCuzJdZr8VH2CLSNCDIzTlKiT0kbPMzY3W3oGYlt9IjDJnwCih0uYmBw6ESotgYM3qVp8gpvUgq65ZsFT_U-MZ3AG8zAAyyXTYnR3nNveHxvgjKrasOdO1a1VeQ09UvNYlIQg6yW9BXrXBBlGCo7p3WaiaL-WyASImwLbZXknL-E1Alrmbt2kfDTcyhhIU-91Pu2pGn1jUH0NSS2g7MQsvjBxNadWL1O82WZonQxkV911FNZM7kiTFReNwreKs5PaiUcB6upuhYJ4nJwyRkBjrjD-KnSGlDwdcBdcO7ee_hfAiPvIyf9QucrvQbdlBwh-vZZ_f0-WVTLp3r2_7aCu8ollQd6FVziXbiWXjMlDWDSs0_hAzra1kqDSl9vmhwNSIIRYR0-IFHz3g7lbAB5-nL-J9J4JbrsgCehNybXu5OGPWKc14NqeWCxaPVucYrJjzG38Z7UJuZkkS4CG5SkddyV8WbEZBDUASKzPaDvH6hccs1Q4G-PYGu-xZSdbWw0HYhNE-GKcx0pAE4a9Yrxdul1iPwaM-WOQrJP7ThJGqfN2jfOfGE1cFsqX4xXa0o6ovWoM5TWPpgAYEslljZuBi0ztjltPk10bxAvLLwNrx9x-zzaT-ZIneHdvG__uEKSU7U98XnhLsataKKkL2H3yXQylWVEjNLeq1R7KcJ1fyqiCCWMJlJhnCIEUCdcTEwf0fg_Klk2yXpHvYkQG_8zOQzrSsJAkFiJV7OeR6Pku7ZTvXYdwt3rjjja0ji5ITyz0YNU1NLPUyv5Ek9hp1y1cOvtNKHUCIp9CBNaYWb6m9oUG7ntwJR90LNjuUZ9sgAw1bfBZS6f8EvAIfLvKhQ0BC3fJu8O5OO0q7eLJyoywCZcXa0TVdN6uO3fHU3cpDqEpedluM9H-jj6kDD6Zhixvi_I2S5MSPw2GUb3bOAbmVSKke5YNc6=w1350-h1800-no",
@@ -58,11 +74,19 @@ const data = [
     type: "note" as const,
     title: "Watermelon has to be the name of my cult or band",
     date: "2022-08-21",
+    tag: {
+      name: "#thoughts",
+      color: "purple",
+    },
   },
   {
     type: "note" as const,
     title: "There should be a way to run social experiments on dummy societies",
     date: "2022-10-30",
+    tag: {
+      name: "#thoughts",
+      color: "purple",
+    },
   },
 ];
 

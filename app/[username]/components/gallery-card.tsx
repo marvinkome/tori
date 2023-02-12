@@ -2,11 +2,12 @@
 import Image from "next/image";
 import cn from "classnames";
 import dayjs from "dayjs";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { motion } from "framer-motion";
 import { useId, useState } from "react";
+import { getTagColorClasses } from "./utils";
 
-type GalleryCardProps = { title: string; date: string; images: string[]; className?: string };
-const GalleryCard = ({ title, date, images, className }: GalleryCardProps) => {
+type GalleryCardProps = { title: string; date: string; tag?: { name: string; color: string }; images: string[]; className?: string };
+const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) => {
   const id = useId();
   const [isActive, setIsActive] = useState(false);
 
@@ -21,9 +22,11 @@ const GalleryCard = ({ title, date, images, className }: GalleryCardProps) => {
           className
         )}
       >
-        <div className="mb-4">
-          <h3 className="font-serif text-2xl font-light mb-1 font-serif-variation">{title}</h3>
-          <p className="text-sm text-neutral-400 font-light">{dayjs(date).format("DD MMM")}</p>
+        <div className="mb-2">
+          <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
+          <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
+
+          {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>{tag.name}</p>}
         </div>
 
         <div className="grow relative flex justify-center items-center h-full">
