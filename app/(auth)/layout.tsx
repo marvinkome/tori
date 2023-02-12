@@ -1,11 +1,38 @@
-const AuthLayout = async ({ children }: any) => {
+import { createClient } from "@/libs/supabase/server";
+import { redirect } from "next/navigation";
+
+const checkForProfile = async () => {
+  const supabase = createClient();
+  const sessionResponse = await supabase.auth.getSession();
+  if (!sessionResponse.data.session) {
+    return null;
+  }
+
+  const currentUser = sessionResponse.data.session.user;
+  const profileResponse = await supabase.from("profiles").select("username, fullname").eq("id", currentUser.id).single();
+  return profileResponse.data;
+};
+
+const Layout = async ({ children }: any) => {
+  const profile = await checkForProfile();
+  const hasCompleteProfile = profile?.fullname && profile?.username;
+
+  if (profile) {
+    if (!hasCompleteProfile) {
+      redirect("/profile");
+    } else {
+      redirect(`/${profile?.username}`);
+    }
+  }
+
   return (
-    <div className="h-full w-screen flex flex-col items-center justify-center m-0 bg-gradient-to-r from-sky-500 to-indigo-500">
-      <div className="w-[28rem] max-w-full min-h-[18rem] px-6">
-        <div className="bg-white shadow-2xl px-6 py-6 rounded-lg h-full">{children}</div>
+    <div className="max-w-sm my-20 mx-auto">
+      <div className="px-6 py-6 h-full">
+        <h3 className="text-xl font-serif font-semibold">Tori</h3>
+        {children}
       </div>
     </div>
   );
 };
 
-export default AuthLayout;
+export default Layout;

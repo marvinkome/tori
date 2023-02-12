@@ -1,9 +1,6 @@
 import { createClient } from "@/libs/supabase/server";
 import { redirect } from "next/navigation";
-import LoginForm from "./login-form";
-import ProfileForm from "./profile-form";
 
-// TODO:: incase of a landing page move this to an Auth component
 const checkForProfile = async () => {
   const supabase = createClient();
   const sessionResponse = await supabase.auth.getSession();
@@ -21,14 +18,14 @@ const Page = async () => {
   const hasCompleteProfile = profile?.fullname && profile?.username;
 
   if (!profile) {
-    return <LoginForm />;
+    redirect("/signin");
   }
 
   if (!hasCompleteProfile) {
-    return <ProfileForm profile={profile} />;
+    redirect("/profile");
   }
 
-  redirect("/app");
+  redirect(`/${profile?.username}`);
 };
 
 export default Page;
