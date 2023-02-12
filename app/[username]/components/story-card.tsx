@@ -73,7 +73,7 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
   const activeStory = stories[active];
 
   return (
-    <div className="max-w-sm max-h-[65vh] w-full h-full relative rounded-lg overflow-hidden">
+    <div className="max-w-sm max-h-[65vh] w-full h-full relative rounded-[10px] overflow-hidden">
       <div className="absolute top-0 left-0 right-0 z-10 flex space-x-2 px-3 py-3">
         {stories.map((item, idx) => (
           <div key={item.image} className="h-[3px] grow relative overflow-hidden rounded-full">

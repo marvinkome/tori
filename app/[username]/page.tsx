@@ -12,9 +12,11 @@ const days = groupBy(data, "date");
 const Page = () => {
   return (
     <main className="h-full relative flex flex-col">
-      <header className="px-14 py-6">
-        <h1 className="font-serif text-4xl font-semibold text-neutral-900 mb-1">Marvin Kome</h1>
-        <p className="font-light text-neutral-500">My simple thoughts, best moments, and some cool things I&rsquo;ve encountered.</p>
+      <header className="px-4 md:px=14 py-4 md:py-6">
+        <h1 className="font-serif text-2xl md:text-4xl font-semibold text-neutral-900 mb-1">Marvin Kome</h1>
+        <p className="hidden md:block font-light text-neutral-500">
+          My simple thoughts, best moments, and some cool things I&rsquo;ve encountered.
+        </p>
       </header>
 
       <div className="grow">
