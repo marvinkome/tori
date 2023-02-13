@@ -1,13 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import cn from "classnames";
+import { Fragment, useState, startTransition } from "react";
 import { motion } from "framer-motion";
 import { GrFormClose } from "react-icons/gr";
 import { HiOutlineUser } from "react-icons/hi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSupabase } from "@/libs/supabase";
+import { Switch } from "@headlessui/react";
+import { useRouter } from "next/navigation";
 
 const ProfileForm = ({ profile }: any) => {
+  const router = useRouter();
   const { supabase, session } = useSupabase();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,9 +30,9 @@ const ProfileForm = ({ profile }: any) => {
       let { error } = await supabase
         .from("profiles")
         .update({
-          username: payload.username.toString(),
           fullname: payload.name.toString(),
           bio: payload.bio.toString(),
+          is_public: payload.is_public ? true : false,
           updated_at: new Date().toISOString(),
         })
         .eq("id", currentUser.id);
@@ -40,6 +44,21 @@ const ProfileForm = ({ profile }: any) => {
       setError(true);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        throw error;
+      }
+
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch (e) {
+      console.error();
     }
   };
 
@@ -98,15 +117,54 @@ const ProfileForm = ({ profile }: any) => {
                   />
                 </div>
 
+                <Switch.Group>
+                  <div className="mb-3">
+                    <Switch.Label className="text-sm block mb-1 text-neutral-600 font-medium">Make public</Switch.Label>
+
+                    <Switch name="is_public" defaultChecked={profile.is_public} as={Fragment}>
+                      {({ checked }) => (
+                        <button
+                          className={cn("relative inline-flex h-6 w-11 p-1 items-center rounded-full", {
+                            "bg-neutral-800 justify-end": checked,
+                            "bg-neutral-300 justify-start": !checked,
+                          })}
+                        >
+                          <span className="sr-only">Toggle profile visibility</span>
+                          <motion.span
+                            layout
+                            transition={{
+                              type: "spring",
+                              stiffness: 700,
+                              damping: 50,
+                            }}
+                            className={cn(`inline-block h-4 w-4 transform rounded-full bg-white transition`)}
+                          />
+                        </button>
+                      )}
+                    </Switch>
+                    <span className="mt-1 block text-xs text-neutral-500">You can make your profile only visible to people you know</span>
+                  </div>
+                </Switch.Group>
+
                 <div>
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="inline-flex items-center justify-center bg-neutral-900 text-sm text-white rounded-lg px-3 py-1.5 hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
-                  >
-                    Save
-                    {isLoading && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
-                  </button>
+                  <div className="flex items-center justify-between pt-2">
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="inline-flex items-center justify-center bg-neutral-900 text-sm text-white rounded-lg px-3 py-1.5 hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
+                    >
+                      Save
+                      {isLoading && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => signOut()}
+                      className="inline-flex items-center text-sm rounded-full border md:border-0 p-1 sm:p-0 border-neutral-200 text-neutral-700 md:text-neutral-400 hover:text-neutral-500"
+                    >
+                      Sign out
+                    </button>
+                  </div>
 
                   {error && <p className="mt-2 text-sm text-red-600">Something went wrong. Please try again</p>}
                 </div>

@@ -1,27 +1,29 @@
-import Link from "next/link";
-import groupBy from "lodash.groupby";
-
 import { createClient } from "@/libs/supabase/server";
 import { notFound } from "next/navigation";
 
+import Link from "next/link";
+import groupBy from "lodash.groupby";
 import ProfileForm from "./components/profile-form";
-
 import Calendar from "./components/calendar";
 import Day from "./components/day";
 import NoteCard from "./components/note-card";
 import GalleryCard from "./components/gallery-card";
 import StoryCard from "./components/story-card";
-
-import { IoIosAdd } from "react-icons/io";
+import RequestAccess from "./request-access";
 
 import data from "./data";
+import { IoIosAdd } from "react-icons/io";
 
 const days = groupBy(data, "date");
-
 const getProfile = async (username: string) => {
   const supabase = createClient();
 
-  const profileResponse = await supabase.from("profiles").select("id, username, fullname, bio").eq("username", username).single();
+  const profileResponse = await supabase
+    .from("profiles")
+    .select("id, username, fullname, bio, is_public")
+    .eq("username", username)
+    .single();
+
   return profileResponse.data;
 };
 
@@ -33,7 +35,12 @@ const getSignedInProfile = async () => {
   }
 
   const currentUser = sessionResponse.data.session.user;
-  const profileResponse = await supabase.from("profiles").select("id, username, fullname, bio").eq("id", currentUser.id).single();
+  const profileResponse = await supabase
+    .from("profiles")
+    .select("id, username, fullname, bio, is_public")
+    .eq("id", currentUser.id)
+    .single();
+
   return profileResponse.data;
 };
 
@@ -45,6 +52,11 @@ const Page = async ({ params }: any) => {
 
   const signedInProfile = await getSignedInProfile();
   const isPageAuthor = profile.id === signedInProfile?.id;
+
+  const isVisible = profile.is_public || isPageAuthor;
+  if (!isVisible) {
+    return <RequestAccess />;
+  }
 
   return (
     <main className="h-full relative flex flex-col">
