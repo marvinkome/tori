@@ -1,14 +1,49 @@
 "use client";
 
 import cn from "classnames";
-import { Fragment, useState, startTransition } from "react";
-import { motion } from "framer-motion";
+import { Fragment, useState, startTransition, useRef } from "react";
+import { animate, AnimationPlaybackControls, motion, useMotionValue, useTransform } from "framer-motion";
+import { FiX } from "react-icons/fi";
 import { GrFormClose } from "react-icons/gr";
 import { HiOutlineUser } from "react-icons/hi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSupabase } from "@/libs/supabase";
 import { Switch } from "@headlessui/react";
 import { useRouter } from "next/navigation";
+
+const ConfirmButton = ({ children, onClick }: any) => {
+  const controls = useRef<AnimationPlaybackControls>();
+  const pathLength = useMotionValue(0);
+
+  const onPointerDown = () => {
+    controls.current = animate(pathLength, 1, {
+      duration: 1,
+      onComplete: () => {
+        controls.current = undefined;
+        onClick();
+      },
+    });
+  };
+
+  const onPointerUp = () => {
+    if (controls.current) controls.current = animate(pathLength, 0);
+  };
+
+  return (
+    <motion.button
+      type="button"
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      className="relative inline-flex items-center text-sm rounded-full border p-0.5 mt-[2px]"
+    >
+      {children}
+
+      <svg viewBox="0 0 100 100" className="absolute inset-[-1.5px] -rotate-90 stroke-red-600">
+        <motion.circle cx="50px" cy="50px" r="48" fill="transparent" strokeWidth={4} style={{ pathLength: pathLength }} />
+      </svg>
+    </motion.button>
+  );
+};
 
 const ProfileForm = ({ profile }: any) => {
   const router = useRouter();
@@ -17,6 +52,9 @@ const ProfileForm = ({ profile }: any) => {
 
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState(false);
+
+  const [sharing, setSharing] = useState(false);
+  const [shareState, setShareState] = useState<"error" | "invited" | "email-sent">();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,12 +77,52 @@ const ProfileForm = ({ profile }: any) => {
 
       if (error) throw error;
       setIsModalOpen(false);
+
+      startTransition(() => {
+        router.refresh();
+      });
     } catch (error) {
       console.error(error);
       setError(true);
     } finally {
       setLoading(false);
     }
+  };
+
+  const onShareProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const payload = Object.fromEntries(new FormData(e.currentTarget as any));
+    try {
+      setShareState(undefined);
+      setSharing(true);
+
+      const response = await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: payload.invite_email }),
+      });
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+
+      setShareState(data.message);
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch (error) {
+      console.error(error);
+      setShareState("error");
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const onRemoveAccess = async () => {
+    // to be implemented
   };
 
   const signOut = async () => {
@@ -79,7 +157,7 @@ const ProfileForm = ({ profile }: any) => {
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="bg-white w-full mx-4 md:max-w-sm md:mx-auto py-3 px-4 rounded-lg shadow-lg"
+              className="bg-white w-full mx-4 sm:max-w-sm md:mx-auto py-3 px-4 rounded-lg shadow-lg"
             >
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-medium text-neutral-500">Settings</h2>
@@ -89,8 +167,9 @@ const ProfileForm = ({ profile }: any) => {
                 </button>
               </div>
 
-              <form onSubmit={onSubmit}>
-                <div className="mb-3">
+              <form id="share-form" onSubmit={onShareProfile} />
+              <form id="profile-form" onSubmit={onSubmit}>
+                <div className="mb-4">
                   <label htmlFor="name" className="text-sm block mb-1 text-neutral-600 font-medium">
                     Full name
                   </label>
@@ -104,7 +183,7 @@ const ProfileForm = ({ profile }: any) => {
                   />
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-4">
                   <label htmlFor="bio" className="text-sm block mb-1 text-neutral-600 font-medium">
                     Bio
                   </label>
@@ -118,7 +197,7 @@ const ProfileForm = ({ profile }: any) => {
                 </div>
 
                 <Switch.Group>
-                  <div className="mb-3">
+                  <div className="mb-2">
                     <Switch.Label className="text-sm block mb-1 text-neutral-600 font-medium">Make public</Switch.Label>
 
                     <Switch name="is_public" defaultChecked={profile.is_public} as={Fragment}>
@@ -146,6 +225,55 @@ const ProfileForm = ({ profile }: any) => {
                   </div>
                 </Switch.Group>
 
+                <div className="mb-4">
+                  <label htmlFor="followers" className="text-sm block mb-1 text-neutral-500 font-medium">
+                    People with access
+                  </label>
+
+                  <div className="space-y-1 mb-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-neutral-700">• Marvin Kome (marvinkome@gmail.com)</p>
+                      <ConfirmButton onClick={() => onRemoveAccess()}>
+                        <FiX className="text-sm" />
+                      </ConfirmButton>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-neutral-700">• Marvin Kome (marvinkome@gmail.com)</p>
+
+                      <ConfirmButton onClick={() => onRemoveAccess()}>
+                        <FiX className="text-sm" />
+                      </ConfirmButton>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start justify-between space-x-2">
+                    <div className="w-full">
+                      <input
+                        required
+                        name="invite_email"
+                        type="email"
+                        placeholder="Email address"
+                        form="share-form"
+                        className="text-sm bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
+                      />
+
+                      {shareState === "error" && <span className="text-xs text-red-600">Something went wrong please try again</span>}
+                      {shareState === "email-sent" && <span className="text-xs text-neutral-500">Invite email sent</span>}
+                    </div>
+
+                    <button
+                      type="submit"
+                      form="share-form"
+                      disabled={sharing}
+                      className="inline-flex items-center justify-center text-sm rounded-lg px-3 py-1.5 bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
+                    >
+                      Share
+                      {sharing && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
+                    </button>
+                  </div>
+                </div>
+
                 <div>
                   <div className="flex items-center justify-between pt-2">
                     <button
@@ -160,7 +288,7 @@ const ProfileForm = ({ profile }: any) => {
                     <button
                       type="button"
                       onClick={() => signOut()}
-                      className="inline-flex items-center text-sm rounded-full border md:border-0 p-1 sm:p-0 border-neutral-200 text-neutral-700 md:text-neutral-400 hover:text-neutral-500"
+                      className="inline-flex items-center text-sm rounded-full p-0 text-neutral-400 hover:text-neutral-500"
                     >
                       Sign out
                     </button>
