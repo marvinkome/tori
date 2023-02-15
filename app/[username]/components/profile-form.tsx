@@ -45,7 +45,7 @@ const ConfirmButton = ({ children, onClick }: any) => {
   );
 };
 
-const ProfileForm = ({ profile }: any) => {
+const ProfileForm = ({ profile, followers }: any) => {
   const router = useRouter();
   const { supabase, session } = useSupabase();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -110,6 +110,8 @@ const ProfileForm = ({ profile }: any) => {
       const data = await response.json();
 
       setShareState(data.message);
+      (e.target as any).reset();
+
       startTransition(() => {
         router.refresh();
       });
@@ -121,8 +123,19 @@ const ProfileForm = ({ profile }: any) => {
     }
   };
 
-  const onRemoveAccess = async () => {
-    // to be implemented
+  const onRemoveAccess = async (id: string) => {
+    try {
+      const currentUser = session?.user!;
+      let { error } = await supabase.from("followers").delete().eq("following_id", currentUser.id).eq("follower_id", id);
+
+      if (error) throw error;
+
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const signOut = async () => {
@@ -231,20 +244,21 @@ const ProfileForm = ({ profile }: any) => {
                   </label>
 
                   <div className="space-y-1 mb-2">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-neutral-700">• Marvin Kome (marvinkome@gmail.com)</p>
-                      <ConfirmButton onClick={() => onRemoveAccess()}>
-                        <FiX className="text-sm" />
-                      </ConfirmButton>
-                    </div>
+                    {!!followers.length && (
+                      <>
+                        {followers.map(({ follower }: any) => (
+                          <div key={follower.id} className="flex items-center justify-between">
+                            <p className="text-sm text-neutral-700">
+                              • {follower.fullname ? `${follower.fullname} (${follower.email})` : follower.email}
+                            </p>
 
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-neutral-700">• Marvin Kome (marvinkome@gmail.com)</p>
-
-                      <ConfirmButton onClick={() => onRemoveAccess()}>
-                        <FiX className="text-sm" />
-                      </ConfirmButton>
-                    </div>
+                            <ConfirmButton onClick={() => onRemoveAccess(follower.id)}>
+                              <FiX className="text-sm" />
+                            </ConfirmButton>
+                          </div>
+                        ))}
+                      </>
+                    )}
                   </div>
 
                   <div className="flex items-start justify-between space-x-2">

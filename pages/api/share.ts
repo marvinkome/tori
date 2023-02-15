@@ -35,13 +35,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         // check if user is already a follower
         const checkForFollowerResponse = await supabase
           .from("followers")
-          .select(`profile:profile(email), follower:follower(email)`)
-          .eq("profile.email", currentProfileResponse.data.email)
+          .select(`follower:follower_id(email), following:following_id(email)`)
+          .eq("following.email", currentProfileResponse.data.email)
           .eq("follower.email", email)
           .throwOnError()
           .maybeSingle();
 
         if (checkForFollowerResponse.data) {
+          console.warn("%s email is already following - %j", LOG_TAG, body);
           return res.status(200).send({ message: "already-following" });
         }
 
@@ -55,6 +56,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
           .maybeSingle();
 
         if (!userResponse.data) {
+          console.log("%s user not yet created. sending invite email - %j", LOG_TAG, body);
           const inviteResponse = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
             redirectTo: getBaseURL() + `/profile/invite?invitedBy=${currentProfileResponse.data.username}`,
           });
@@ -63,6 +65,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             throw inviteResponse.error;
           }
 
+          console.log("%s adding new user as a follower - %j", LOG_TAG, body);
           await supabaseAdmin
             .from("followers")
             .insert({
@@ -74,6 +77,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
           return res.send({ message: "email-sent" });
         }
 
+        console.log("%s adding existing user as a follower - %j", LOG_TAG, body);
         await supabaseAdmin
           .from("followers")
           .insert({

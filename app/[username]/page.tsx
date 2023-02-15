@@ -92,7 +92,7 @@ const Page = async ({ params }: any) => {
                 <span className="hidden sm:inline ml-1">Add event</span>
               </button>
 
-              <ProfileForm profile={signedInProfile} />
+              <ProfileForm profile={signedInProfile} followers={profile.followers} />
             </>
           )}
 
