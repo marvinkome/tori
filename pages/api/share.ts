@@ -34,7 +34,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
         // check if user is already a follower
         const checkForFollowerResponse = await supabase
-          .from("profile_followers")
+          .from("followers")
           .select(`profile:profile(email), follower:follower(email)`)
           .eq("profile.email", currentProfileResponse.data.email)
           .eq("follower.email", email)
@@ -64,10 +64,10 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
           }
 
           await supabaseAdmin
-            .from("profile_followers")
+            .from("followers")
             .insert({
-              profile: currentProfileResponse.data.id,
-              follower: inviteResponse.data.user.id,
+              following_id: currentProfileResponse.data.id,
+              follower_id: inviteResponse.data.user.id,
             })
             .throwOnError();
 
@@ -75,10 +75,10 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         }
 
         await supabaseAdmin
-          .from("profile_followers")
+          .from("followers")
           .insert({
-            profile: currentProfileResponse.data.id,
-            follower: userResponse.data.id,
+            following_id: currentProfileResponse.data.id,
+            follower_id: userResponse.data.id,
           })
           .throwOnError();
 

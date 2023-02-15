@@ -20,7 +20,23 @@ const getProfile = async (username: string) => {
 
   const profileResponse = await supabase
     .from("profiles")
-    .select("id, username, fullname, bio, is_public")
+    .select(
+      `
+      id, 
+      username, 
+      fullname, 
+      bio, 
+      is_public, 
+      followers!follower ( 
+        follower:follower_id ( 
+          id,
+          username,
+          fullname,
+          email
+        )
+      )
+      `
+    )
     .eq("username", username)
     .single();
 
@@ -51,9 +67,11 @@ const Page = async ({ params }: any) => {
   }
 
   const signedInProfile = await getSignedInProfile();
-  const isPageAuthor = profile.id === signedInProfile?.id;
 
-  const isVisible = profile.is_public || isPageAuthor;
+  const isPageAuthor = profile.id === signedInProfile?.id;
+  const isFollower = (profile.followers as any).find((f: any) => f.follower.id === signedInProfile?.id);
+
+  const isVisible = profile.is_public || isPageAuthor || isFollower;
   if (!isVisible) {
     return <RequestAccess />;
   }
