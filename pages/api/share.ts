@@ -26,20 +26,28 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
           return res.status(400).send({ message: "no email in body" });
         }
 
-        const currentProfileResponse = await supabase.from("profiles").select("id, email, username").eq("id", session.user.id).single();
+        const currentProfileResponse = await supabase
+          .from("profiles")
+          .select("id, email, username")
+          .eq("id", session.user.id)
+          .single();
+
         if (currentProfileResponse.error) {
           throw currentProfileResponse.error;
         }
 
-        // check if user is already following
+        // check if user is already a follower
         const checkForFollowerResponse = await supabase
           .from("profile_followers")
           .select(`profile:profile(email), follower:follower(email)`)
-          .eq("profile", currentProfileResponse.data.email)
-          .eq("follower", email)
-          .throwOnError();
+          .eq("profile.email", currentProfileResponse.data.email)
+          .eq("follower.email", email)
+          .throwOnError()
+          .maybeSingle();
 
-        console.log({ data: checkForFollowerResponse.data });
+        if (checkForFollowerResponse.data) {
+          return res.status(200).send({ message: "already-following" });
+        }
 
         // check user is already created
         const userResponse = await supabaseAdmin
@@ -59,22 +67,26 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             throw inviteResponse.error;
           }
 
-          await supabaseAdmin.from("profile_followers").insert({
-            profile: currentProfileResponse.data.id,
-            follower: inviteResponse.data.user.id,
-          });
+          await supabaseAdmin
+            .from("profile_followers")
+            .insert({
+              profile: currentProfileResponse.data.id,
+              follower: inviteResponse.data.user.id,
+            })
+            .throwOnError();
 
           return res.send({ message: "email-sent" });
         }
 
-        console.log({ data: userResponse.data });
+        await supabaseAdmin
+          .from("profile_followers")
+          .insert({
+            profile: currentProfileResponse.data.id,
+            follower: userResponse.data.id,
+          })
+          .throwOnError();
 
-        // if user is created add them to a follower
-        // if user is not created then send them an invite email with a link to add the user as a follower
-
-        // const inviteResponse = await supabaseAdmin.auth.admin.inviteUserByEmail(email);
-
-        return res.send({ message: "email-sent" });
+        return res.send({ message: "invited" });
       }
       default:
         console.warn("%s unauthorized method - %s", LOG_TAG, method);

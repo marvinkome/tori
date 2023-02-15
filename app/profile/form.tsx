@@ -1,12 +1,13 @@
 "use client";
 
 import { useSupabase } from "@/libs/supabase";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Form = ({ initialProfile }: { initialProfile: any }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { supabase, session } = useSupabase();
 
   const [error, setError] = useState(false);
@@ -33,7 +34,9 @@ const Form = ({ initialProfile }: { initialProfile: any }) => {
         .eq("id", currentUser.id);
 
       if (error) throw error;
-      router.push(`/${payload.username}`);
+
+      const invitedBy = searchParams.get("invitedBy");
+      router.push(`/${invitedBy || payload.username}`);
     } catch (error) {
       console.error(error);
       setError(true);
