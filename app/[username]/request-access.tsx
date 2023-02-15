@@ -27,10 +27,9 @@ const RequestAccess = () => {
         <div className="fixed inset-0 bg-gray-50/50 transition-opacity" />
         <div className="fixed inset-0 z-10 flex items-center justify-center">
           <div className="bg-white w-full mx-4 md:max-w-sm md:mx-auto py-3 px-4 rounded-lg shadow-lg">
-            <h2 className="mb-2 text-sm font-medium text-neutral-500">Ohh snap!</h2>
+            <h2 className="mb-2 text-sm font-medium text-neutral-500">This profile is private</h2>
             <p className="mb-4 text-neutral-700">
-              You don&apos;t have access to this page. You can contact the author to grant you access to their story or sign in if you
-              already have access.
+              You can ask the author to grant you access to their story or sign in if you already have access.
             </p>
 
             <Link
