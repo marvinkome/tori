@@ -3,13 +3,16 @@ import { notFound } from "next/navigation";
 
 import Link from "next/link";
 import groupBy from "lodash.groupby";
+
+import RequestAccess from "./request-access";
 import ProfileForm from "./components/profile-form";
+import Editor from "./components/editor";
+
 import Calendar from "./components/calendar";
 import Day from "./components/day";
 import NoteCard from "./components/note-card";
 import GalleryCard from "./components/gallery-card";
 import StoryCard from "./components/story-card";
-import RequestAccess from "./request-access";
 
 import data from "./data";
 import { IoIosAdd } from "react-icons/io";
@@ -87,11 +90,7 @@ const Page = async ({ params }: any) => {
         <div className="flex space-x-2 md:space-x-4 items-center">
           {isPageAuthor && (
             <>
-              <button className="inline-flex items-center text-xs text-neutral-600 border border-neutral-200 p-1 sm:px-3 py-1 rounded-full sm:rounded-lg hover:shadow-sm">
-                <IoIosAdd className="text-base" />
-                <span className="hidden sm:inline ml-1">Add event</span>
-              </button>
-
+              <Editor />
               <ProfileForm profile={signedInProfile} followers={profile.followers} />
             </>
           )}

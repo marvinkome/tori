@@ -164,7 +164,7 @@ const ProfileForm = ({ profile, followers }: any) => {
       </button>
 
       {isModalOpen && (
-        <div className="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div className="relative z-50" aria-labelledby="profile-settings" role="dialog" aria-modal="true">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           <div className="fixed inset-0 z-10 flex items-center justify-center">
             <motion.div
