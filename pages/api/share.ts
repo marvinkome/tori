@@ -26,11 +26,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
           return res.status(400).send({ message: "no email in body" });
         }
 
-        const currentProfileResponse = await supabase
-          .from("profiles")
-          .select("id, email, username")
-          .eq("id", session.user.id)
-          .single();
+        const currentProfileResponse = await supabase.from("profiles").select("id, email, username").eq("id", session.user.id).single();
 
         if (currentProfileResponse.error) {
           throw currentProfileResponse.error;
@@ -60,7 +56,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
         if (!userResponse.data) {
           const inviteResponse = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-            redirectTo: getBaseURL() + `/profile?invitedBy=${currentProfileResponse.data.username}`,
+            redirectTo: getBaseURL() + `/profile/invite?invitedBy=${currentProfileResponse.data.username}`,
           });
 
           if (inviteResponse.error) {
