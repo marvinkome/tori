@@ -15,7 +15,6 @@ import GalleryCard from "./components/gallery-card";
 import StoryCard from "./components/story-card";
 
 import data from "./data";
-import { IoIosAdd } from "react-icons/io";
 
 const days = groupBy(data, "date");
 const getProfile = async (username: string) => {
