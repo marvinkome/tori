@@ -6,7 +6,7 @@ import groupBy from "lodash.groupby";
 
 import RequestAccess from "./request-access";
 import ProfileForm from "./components/profile-form";
-import Editor from "./components/editor";
+import AddPost from "./components/add-post";
 
 import Calendar from "./components/calendar";
 import Day from "./components/day";
@@ -89,7 +89,7 @@ const Page = async ({ params }: any) => {
         <div className="flex space-x-2 md:space-x-4 items-center">
           {isPageAuthor && (
             <>
-              <Editor />
+              <AddPost />
               <ProfileForm profile={signedInProfile} followers={profile.followers} />
             </>
           )}
