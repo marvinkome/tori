@@ -239,9 +239,7 @@ const ProfileForm = ({ profile, followers }: any) => {
                 </Switch.Group>
 
                 <div className="mb-4">
-                  <label htmlFor="followers" className="text-sm block mb-1 text-neutral-500 font-medium">
-                    People with access
-                  </label>
+                  <label className="text-sm block mb-1 text-neutral-500 font-medium">People with access</label>
 
                   <div className="space-y-1 mb-2">
                     {!!followers.length && (
