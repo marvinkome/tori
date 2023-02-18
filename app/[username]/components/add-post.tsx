@@ -71,8 +71,6 @@ const StoryForm = ({ formValue, setFormValue }: any) => {
                 {idx === editingIdx ? (
                   <div className="space-y-2">
                     <input
-                      required
-                      id="tag"
                       type="text"
                       placeholder="Title (optional)"
                       value={story.title}
@@ -81,7 +79,6 @@ const StoryForm = ({ formValue, setFormValue }: any) => {
                     />
 
                     <textarea
-                      id="tag"
                       rows={4}
                       placeholder="Caption (optional)"
                       value={story.content}
