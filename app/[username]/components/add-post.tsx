@@ -185,8 +185,6 @@ const Editor = ({ onClose }: any) => {
   const [formValue, setFormValue] = useState({
     title: "",
     date: "",
-    tag: "",
-    tagColor: "lime",
     type: "note",
     images: [] as File[],
     stories: [] as { image: File; title?: string; content?: string }[],
@@ -218,8 +216,6 @@ const Editor = ({ onClose }: any) => {
         title: formValue.title,
         type: formValue.type,
         date: formValue.date,
-        tagName: formValue.tag,
-        tagColor: formValue.tagColor,
       };
 
       if (formValue.type === "gallery") {
