@@ -189,7 +189,7 @@ const StoryCard = ({ title, date, tag, stories, className }: StoryCardProps) => 
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
 
   const [isActive, setIsActive] = useState(false);
-  const isDesktop = useMedia("(min-width: 768px)", false);
+  const isDesktop = useMedia("(min-width: 1024px)", false);
 
   const { styles, attributes } = usePopper(rootElement, popperElement, {
     placement: "left-end",

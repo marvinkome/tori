@@ -238,53 +238,55 @@ const ProfileForm = ({ profile, followers }: any) => {
                   </div>
                 </Switch.Group>
 
-                <div className="mb-4">
-                  <label className="text-sm block mb-1 text-neutral-500 font-medium">People with access</label>
+                {!profile.is_public && (
+                  <div className="mb-4">
+                    <label className="text-sm block mb-1 text-neutral-500 font-medium">People with access</label>
 
-                  <div className="space-y-1 mb-2">
-                    {!!followers.length && (
-                      <>
-                        {followers.map(({ follower }: any) => (
-                          <div key={follower.id} className="flex items-center justify-between">
-                            <p className="text-sm text-neutral-700">
-                              • {follower.fullname ? `${follower.fullname} (${follower.email})` : follower.email}
-                            </p>
+                    <div className="space-y-1 mb-2">
+                      {!!followers.length && (
+                        <>
+                          {followers.map(({ follower }: any) => (
+                            <div key={follower.id} className="flex items-center justify-between">
+                              <p className="text-sm text-neutral-700">
+                                • {follower.fullname ? `${follower.fullname} (${follower.email})` : follower.email}
+                              </p>
 
-                            <ConfirmButton onClick={() => onRemoveAccess(follower.id)}>
-                              <FiX className="text-sm" />
-                            </ConfirmButton>
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
-
-                  <div className="flex items-start justify-between space-x-2">
-                    <div className="w-full">
-                      <input
-                        required
-                        name="invite_email"
-                        type="email"
-                        placeholder="Email address"
-                        form="share-form"
-                        className="text-sm bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
-                      />
-
-                      {shareState === "error" && <span className="text-xs text-red-600">Something went wrong please try again</span>}
-                      {shareState === "email-sent" && <span className="text-xs text-neutral-500">Invite email sent</span>}
+                              <ConfirmButton onClick={() => onRemoveAccess(follower.id)}>
+                                <FiX className="text-sm" />
+                              </ConfirmButton>
+                            </div>
+                          ))}
+                        </>
+                      )}
                     </div>
 
-                    <button
-                      type="submit"
-                      form="share-form"
-                      disabled={sharing}
-                      className="inline-flex items-center justify-center text-sm rounded-lg px-3 py-1.5 bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
-                    >
-                      Share
-                      {sharing && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
-                    </button>
+                    <div className="flex items-start justify-between space-x-2">
+                      <div className="w-full">
+                        <input
+                          required
+                          name="invite_email"
+                          type="email"
+                          placeholder="Email address"
+                          form="share-form"
+                          className="text-sm bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
+                        />
+
+                        {shareState === "error" && <span className="text-xs text-red-600">Something went wrong please try again</span>}
+                        {shareState === "email-sent" && <span className="text-xs text-neutral-500">Invite email sent</span>}
+                      </div>
+
+                      <button
+                        type="submit"
+                        form="share-form"
+                        disabled={sharing}
+                        className="inline-flex items-center justify-center text-sm rounded-lg px-3 py-1.5 bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
+                      >
+                        Share
+                        {sharing && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div>
                   <div className="flex items-center justify-between pt-2">
