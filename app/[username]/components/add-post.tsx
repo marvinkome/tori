@@ -277,7 +277,7 @@ const Editor = ({ onClose }: any) => {
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="relative bg-white w-full mx-4 sm:max-w-md md:mx-auto  rounded-lg shadow-lg max-h-[680px] overflow-y-auto"
+          className="relative bg-white w-full mx-4 sm:max-w-md md:mx-auto  rounded-lg shadow-lg max-h-[580px] overflow-y-auto"
         >
           <div className="mb-4 flex items-center justify-between sticky top-0 bg-white pt-3 px-4">
             <h2 className="text-sm font-medium text-neutral-500">New post</h2>
@@ -293,9 +293,10 @@ const Editor = ({ onClose }: any) => {
                 <label htmlFor="title" className="text-sm block mb-1 text-neutral-600 font-medium">
                   Title
                 </label>
-                <textarea
+                <input
                   required
                   id="title"
+                  type="text"
                   value={formValue.title}
                   onChange={(e) => setFormValue({ ...formValue, title: e.target.value })}
                   className="bg-neutral-100 w-full py-1.5 px-3 rounded-md resize-none hover:bg-[#f0f0f0] placeholder:text-neutral-500"
@@ -315,90 +316,6 @@ const Editor = ({ onClose }: any) => {
                   onChange={(e) => setFormValue({ ...formValue, date: e.target.value })}
                   className="bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
                 />
-              </div>
-
-              <div className="mb-4">
-                <label htmlFor="tag" className="text-sm block mb-1 text-neutral-600 font-medium">
-                  Tag
-                </label>
-
-                <div className="flex items-center space-x-4">
-                  <input
-                    required
-                    id="tag"
-                    type="text"
-                    value={formValue.tag}
-                    onChange={(e) => setFormValue({ ...formValue, tag: e.target.value })}
-                    className="bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
-                  />
-
-                  <RadioGroup
-                    value={formValue.tagColor}
-                    onChange={(value: any) => setFormValue({ ...formValue, tagColor: value })}
-                    aria-required="true"
-                    className="flex space-x-2"
-                  >
-                    <RadioGroup.Option
-                      as="button"
-                      type="button"
-                      value="lime"
-                      className={({ checked }) =>
-                        cn("w-7 h-7 rounded-full hover:bg-lime-400/80", {
-                          "bg-lime-400/40": !checked,
-                          "bg-lime-400/100 border border-black": checked,
-                        })
-                      }
-                    />
-
-                    <RadioGroup.Option
-                      as="button"
-                      type="button"
-                      value="purple"
-                      className={({ checked }) =>
-                        cn("w-7 h-7 rounded-full hover:bg-purple-400/80", {
-                          "bg-purple-400/40 ": !checked,
-                          "bg-purple-400/100 border border-black": checked,
-                        })
-                      }
-                    />
-
-                    <RadioGroup.Option
-                      as="button"
-                      type="button"
-                      value="orange"
-                      className={({ checked }) =>
-                        cn("w-7 h-7 rounded-full hover:bg-orange-400/80", {
-                          "bg-orange-400/40 ": !checked,
-                          "bg-orange-400/100 border border-black": checked,
-                        })
-                      }
-                    />
-
-                    <RadioGroup.Option
-                      as="button"
-                      type="button"
-                      value="blue"
-                      className={({ checked }) =>
-                        cn("w-7 h-7 rounded-full hover:bg-blue-400/80", {
-                          "bg-blue-400/40 ": !checked,
-                          "bg-blue-400/100 border border-black": checked,
-                        })
-                      }
-                    />
-
-                    <RadioGroup.Option
-                      as="button"
-                      type="button"
-                      value="amber"
-                      className={({ checked }) =>
-                        cn("w-7 h-7 rounded-full hover:bg-amber-400/80", {
-                          "bg-amber-400/40 ": !checked,
-                          "bg-amber-400/100 border border-black": checked,
-                        })
-                      }
-                    />
-                  </RadioGroup>
-                </div>
               </div>
 
               <RadioGroup value={formValue.type} onChange={(value: any) => setFormValue({ ...formValue, type: value })} className="mb-4">

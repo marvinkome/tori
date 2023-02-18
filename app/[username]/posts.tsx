@@ -18,8 +18,6 @@ const getPosts = async (profileId: string) => {
       title,
       date,
       type,
-      tagName,
-      tagColor,
       images,
       stories,
       author (
@@ -37,7 +35,6 @@ const getPosts = async (profileId: string) => {
 const Posts = async ({ profileId }: { profileId: string }) => {
   const posts = await getPosts(profileId);
   const days = groupBy(posts, "date");
-  console.log(days);
 
   return (
     <Calendar>
@@ -52,7 +49,6 @@ const Posts = async ({ profileId }: { profileId: string }) => {
                     key={idx}
                     title={item.title}
                     date={item.date}
-                    tag={{ name: item.tagName, color: item.tagColor }}
                     stories={item.stories}
                     className={item.title.length > 60 ? "row-span-2" : "row-span-1"}
                   />
@@ -65,23 +61,14 @@ const Posts = async ({ profileId }: { profileId: string }) => {
                     key={idx}
                     title={item.title}
                     date={item.date}
-                    tag={{ name: item.tagName, color: item.tagColor }}
                     images={item.images}
-                    // HACK: Set the grid height based on the title number
                     className={item.title.length > 60 ? "row-span-3" : "row-span-2"}
                   />
                 );
               }
 
               return (
-                <NoteCard
-                  key={idx}
-                  title={item.title}
-                  date={item.date}
-                  tag={{ name: item.tagName, color: item.tagColor }}
-                  // HACK: Set the grid height based on the title number
-                  className={item.title.length > 60 ? "row-span-2" : "row-span-1"}
-                />
+                <NoteCard key={idx} title={item.title} date={item.date} className={item.title.length > 60 ? "row-span-2" : "row-span-1"} />
               );
             })}
           </Day>
