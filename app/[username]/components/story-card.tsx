@@ -1,6 +1,7 @@
 "use client";
 import dayjs from "dayjs";
 import cn from "classnames";
+import Image from "next/image";
 import { AnimatePresence, motion, wrap } from "framer-motion";
 import { pausableTimeout } from "libs/utils";
 
@@ -8,6 +9,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useMedia } from "react-use";
 import { getTagColorClasses } from "./utils";
+import { useSupabase } from "@/libs/supabase";
 
 const swipeConfidenceThreshold = 1000;
 const swipePower = (offset: number, velocity: number) => {
@@ -33,8 +35,9 @@ const variants = {
 };
 
 const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
-  let interval = 6000;
+  const { supabase } = useSupabase();
 
+  let interval = 6000;
   const [timer, setTimer] = useState<any>();
   const [isPaused, setIsPaused] = useState(false);
   const [[page, direction], setPage] = useState([0, 0]);
@@ -44,6 +47,14 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
       setPage([page + newDirection, newDirection]);
     },
     [page]
+  );
+
+  const getPublicUrl = useCallback(
+    (url: string) => {
+      const { data } = supabase.storage.from("posts").getPublicUrl(url);
+      return data.publicUrl;
+    },
+    [supabase]
   );
 
   useEffect(() => {
@@ -123,12 +134,15 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
           className="w-full h-full absolute rounded-lg overflow-hidden bg-cover bg-center"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={activeStory.image}
-            referrerPolicy="no-referrer"
-            alt={activeStory.title || activeStory.content}
+          <Image
+            src={getPublicUrl(activeStory.image)}
+            width={372}
+            height={577}
+            priority
+            alt={activeStory.title || activeStory.content || "no-alt-text"}
             className="absolute w-full h-full object-cover object-center z-[-5]"
           />
+
           {(activeStory.title || activeStory.content) && (
             <div
               style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.4) 15%, rgba(0,0,0,0) 40%)" }}
@@ -216,16 +230,7 @@ const StoryCard = ({ title, date, tag, stories, className }: StoryCardProps) => 
         <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
         <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
 
-        {tag && (
-          <p
-            className={cn(
-              "bg-orange-400/40 text-orange-900 text-xs px-1.5 py-1.5 inline-block rounded shadow",
-              getTagColorClasses(tag.color)
-            )}
-          >
-            {tag.name}
-          </p>
-        )}
+        {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>#{tag.name}</p>}
       </div>
 
       {isActive && (

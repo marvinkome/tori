@@ -3,13 +3,23 @@ import Image from "next/image";
 import cn from "classnames";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
-import { useId, useState } from "react";
+import { useCallback, useId, useState } from "react";
 import { getTagColorClasses } from "./utils";
+import { useSupabase } from "@/libs/supabase";
 
 type GalleryCardProps = { title: string; date: string; tag?: { name: string; color: string }; images: string[]; className?: string };
 const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) => {
   const id = useId();
   const [isActive, setIsActive] = useState(false);
+  const { supabase } = useSupabase();
+
+  const getPublicUrl = useCallback(
+    (url: string) => {
+      const { data } = supabase.storage.from("posts").getPublicUrl(url);
+      return data.publicUrl;
+    },
+    [supabase]
+  );
 
   return (
     <>
@@ -26,7 +36,7 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
           <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
           <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
 
-          {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>{tag.name}</p>}
+          {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>#{tag.name}</p>}
         </div>
 
         <div className="grow relative flex justify-center items-center h-full">
@@ -55,11 +65,12 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
                     }
                   )}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={image}
-                    referrerPolicy="no-referrer"
+                  <Image
+                    src={getPublicUrl(image)}
                     alt={`Images of "${title}"`}
+                    width={136}
+                    height={88}
+                    priority
                     className="w-full h-full object-cover object-center"
                   />
                 </div>
@@ -91,11 +102,12 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
                     "z-[4] translate-x-[45%] translate-y-[52%] rotate-[-2deg]": idx === 3,
                   })}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={image}
-                    referrerPolicy="no-referrer"
+                  <Image
+                    src={getPublicUrl(image)}
                     alt={`Images of "${title}"`}
+                    width={460}
+                    height={280}
+                    priority
                     className="w-full h-full object-cover object-center"
                   />
                 </div>

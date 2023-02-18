@@ -21,7 +21,7 @@ const NoteCard = ({ title, date, tag, className }: NoteCardProps) => {
         <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
         <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
 
-        {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>{tag.name}</p>}
+        {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>#{tag.name}</p>}
       </div>
     </div>
   );

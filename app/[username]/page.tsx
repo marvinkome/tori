@@ -2,21 +2,14 @@ import { createClient } from "@/libs/supabase/server";
 import { notFound } from "next/navigation";
 
 import Link from "next/link";
-import groupBy from "lodash.groupby";
 
 import RequestAccess from "./request-access";
 import ProfileForm from "./components/profile-form";
 import AddPost from "./components/add-post";
 
-import Calendar from "./components/calendar";
-import Day from "./components/day";
-import NoteCard from "./components/note-card";
-import GalleryCard from "./components/gallery-card";
-import StoryCard from "./components/story-card";
+import Posts from "./posts";
 
-import data from "./data";
-
-const days = groupBy(data, "date");
+// const days = groupBy(data, "date");
 const getProfile = async (username: string) => {
   const supabase = createClient();
 
@@ -106,55 +99,8 @@ const Page = async ({ params }: any) => {
       </header>
 
       <div className="grow">
-        <Calendar>
-          {Object.keys(days).map((date) => {
-            const items = days[date];
-            return (
-              <Day key={date} date={date}>
-                {items.map((item, idx) => {
-                  if (item.type === "story") {
-                    return (
-                      <StoryCard
-                        key={idx}
-                        title={item.title}
-                        date={item.date}
-                        tag={item.tag}
-                        stories={item.stories}
-                        // HACK: Set the grid height based on the title number
-                        className={item.title.length > 60 ? "row-span-3" : "row-span-2"}
-                      />
-                    );
-                  }
-
-                  if (item.type === "gallery") {
-                    return (
-                      <GalleryCard
-                        key={idx}
-                        title={item.title}
-                        date={item.date}
-                        tag={item.tag}
-                        images={item.images}
-                        // HACK: Set the grid height based on the title number
-                        className={item.title.length > 60 ? "row-span-5" : "row-span-4"}
-                      />
-                    );
-                  }
-
-                  return (
-                    <NoteCard
-                      key={idx}
-                      title={item.title}
-                      date={item.date}
-                      tag={item.tag}
-                      // HACK: Set the grid height based on the title number
-                      className={item.title.length > 60 ? "row-span-3" : "row-span-2"}
-                    />
-                  );
-                })}
-              </Day>
-            );
-          })}
-        </Calendar>
+        {/* @ts-expect-error Server Component */}
+        <Posts profileId={profile.id} />
       </div>
     </main>
   );
