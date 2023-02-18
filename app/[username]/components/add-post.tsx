@@ -77,7 +77,7 @@ const StoryForm = ({ formValue, setFormValue }: any) => {
                       placeholder="Title (optional)"
                       value={story.title}
                       onChange={(e) => onChange("title", e.target.value, idx)}
-                      className="bg-neutral-100 w-full py-1.5 px-3 text-sm rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
+                      className="bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
                     />
 
                     <textarea
@@ -86,7 +86,7 @@ const StoryForm = ({ formValue, setFormValue }: any) => {
                       placeholder="Caption (optional)"
                       value={story.content}
                       onChange={(e) => onChange("content", e.target.value, idx)}
-                      className="bg-neutral-100 w-full py-1.5 px-3 text-sm rounded-md resize-none hover:bg-[#f0f0f0] placeholder:text-neutral-500"
+                      className="bg-neutral-100 w-full py-1.5 px-3 rounded-md resize-none hover:bg-[#f0f0f0] placeholder:text-neutral-500"
                     />
                   </div>
                 ) : (
@@ -277,9 +277,9 @@ const Editor = ({ onClose }: any) => {
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="relative bg-white w-full mx-4 sm:max-w-md md:mx-auto  rounded-lg shadow-lg max-h-[580px] overflow-y-auto"
+          className="relative bg-white w-full mx-4 sm:max-w-md md:mx-auto rounded-lg shadow-lg max-h-[580px] overflow-y-auto"
         >
-          <div className="mb-4 flex items-center justify-between sticky top-0 bg-white pt-3 px-4">
+          <div className="mb-4 flex items-center justify-between sticky rounded-t-lg top-0 bg-white pt-3 px-4">
             <h2 className="text-sm font-medium text-neutral-500">New post</h2>
 
             <button onClick={() => onClose()} className="p-1 border rounded-full hover:shadow-sm transition-all">
@@ -327,7 +327,7 @@ const Editor = ({ onClose }: any) => {
                     as="button"
                     type="button"
                     className={({ checked }) =>
-                      cn("inline-flex items-center justify-center text-sm px-3 py-0.5 rounded-lg border", {
+                      cn("inline-flex items-center justify-center text-sm px-3 py-1 rounded-lg border", {
                         "border-transparent bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700": checked,
                         "border-neutral-300 hover:border-neutral-400": !checked,
                       })
@@ -341,7 +341,7 @@ const Editor = ({ onClose }: any) => {
                     as="button"
                     type="button"
                     className={({ checked }) =>
-                      cn("inline-flex items-center justify-center text-sm px-3 py-0.5 rounded-lg border", {
+                      cn("inline-flex items-center justify-center text-sm px-3 py-1 rounded-lg border", {
                         "border-transparent bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700": checked,
                         "border-neutral-300 hover:border-neutral-400": !checked,
                       })
@@ -355,7 +355,7 @@ const Editor = ({ onClose }: any) => {
                     as="button"
                     type="button"
                     className={({ checked }) =>
-                      cn("inline-flex items-center justify-center text-sm px-3 py-0.5 rounded-lg border", {
+                      cn("inline-flex items-center justify-center text-sm px-3 py-1 rounded-lg border", {
                         "border-transparent bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700": checked,
                         "border-neutral-300 hover:border-neutral-400": !checked,
                       })
@@ -370,7 +370,7 @@ const Editor = ({ onClose }: any) => {
               {formValue.type === "story" && <StoryForm formValue={formValue} setFormValue={setFormValue} />}
             </div>
 
-            <div className="flex justify-between items-center sticky bottom-0 bg-white py-3 px-4 border-t text-right">
+            <div className="flex justify-between items-center sticky bottom-0 bg-white rounded-b-lg py-3 px-4 border-t text-right">
               {error && <p className="text-sm text-red-500">{error}</p>}
               <button
                 type="submit"
