@@ -14,8 +14,8 @@ const RequestAccess = () => {
       <div className="relative w-full h-full overflow-y-hidden overflow-x-auto [&::-webkit-scrollbar]:hidden">
         <div className="absolute h-full left-0 flex">
           {Array.from({ length: 5 }).map((_, idx) => (
-            <section key={idx} className="w-[60vw] sm:w-[40vw] md:w-[20vw] h-full flex flex-col">
-              <article className="w-full h-full grow p-3">
+            <section key={idx} className="w-[65vw] md:w-[40vw] lg:w-[20vw] h-full flex flex-col">
+              <article className="w-full grow p-3">
                 <div className="animate-pulse rounded-md h-full bg-[rgb(251_251_251)]" />
               </article>
             </section>

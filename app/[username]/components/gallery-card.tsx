@@ -63,14 +63,8 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
                     }
                   )}
                 >
-                  <Image
-                    src={getPublicUrl(image)}
-                    alt={`Images of "${title}"`}
-                    width={262}
-                    height={194}
-                    priority
-                    className="w-full h-full object-cover object-center"
-                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={getPublicUrl(image)} alt={`Images of "${title}"`} className="w-full h-full object-cover object-center" />
                 </div>
               </motion.div>
             ))}
@@ -100,14 +94,8 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
                     "z-[4] translate-x-[45%] translate-y-[52%] rotate-[-2deg]": idx === 3,
                   })}
                 >
-                  <Image
-                    src={getPublicUrl(image)}
-                    alt={`Images of "${title}"`}
-                    width={460}
-                    height={280}
-                    priority
-                    className="w-full h-full object-cover object-center"
-                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={getPublicUrl(image)} alt={`Images of "${title}"`} className="w-full h-full object-cover object-center" />
                 </div>
               </motion.div>
             ))}

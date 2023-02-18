@@ -134,11 +134,8 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
           className="w-full h-full absolute rounded-lg overflow-hidden bg-cover bg-center"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <Image
+          <img
             src={getPublicUrl(activeStory.image)}
-            width={372}
-            height={577}
-            priority
             alt={activeStory.title || activeStory.content || "no-alt-text"}
             className="absolute w-full h-full object-cover object-center z-[-5]"
           />

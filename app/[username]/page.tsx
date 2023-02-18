@@ -66,16 +66,16 @@ const Page = async ({ params }: any) => {
   const isFollower = (profile.followers as any).find((f: any) => f.follower.id === signedInProfile?.id);
 
   const isVisible = profile.is_public || isPageAuthor || isFollower;
-  // if (!isVisible) {
-  //   return <RequestAccess />;
-  // }
+  if (!isVisible) {
+    return <RequestAccess />;
+  }
 
   return (
     <main className="h-full relative flex flex-col">
-      <header className="flex items-baseline justify-between px-4 md:px-14 py-4 md:py-6">
+      <header className="flex items-baseline justify-between px-4 py-4 lg:py-6">
         <div>
           <h1 className="font-serif text-2xl md:text-4xl font-semibold text-neutral-900 mb-1">{profile.fullname}</h1>
-          <p className="hidden md:block font-light text-neutral-500 ml-[2px]">{profile.bio}</p>
+          <p className="hidden lg:block font-light text-neutral-500 ml-[2px]">{profile.bio}</p>
         </div>
 
         <div className="flex space-x-2 md:space-x-4 items-center">
