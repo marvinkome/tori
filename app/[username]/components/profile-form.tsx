@@ -56,10 +56,15 @@ const ProfileForm = ({ profile, followers }: any) => {
   const [sharing, setSharing] = useState(false);
   const [shareState, setShareState] = useState<"error" | "invited" | "email-sent">();
 
+  const [formValue, setFormValue] = useState({
+    fullname: profile.fullname,
+    bio: profile.bio,
+    is_public: profile.is_public,
+  });
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = Object.fromEntries(new FormData(e.currentTarget as any));
     try {
       setError(false);
       setLoading(true);
@@ -68,9 +73,9 @@ const ProfileForm = ({ profile, followers }: any) => {
       let { error } = await supabase
         .from("profiles")
         .update({
-          fullname: payload.name.toString(),
-          bio: payload.bio.toString(),
-          is_public: payload.is_public ? true : false,
+          fullname: formValue.fullname.toString(),
+          bio: formValue.bio.toString(),
+          is_public: formValue.is_public ? true : false,
           updated_at: new Date().toISOString(),
         })
         .eq("id", currentUser.id);
@@ -183,15 +188,15 @@ const ProfileForm = ({ profile, followers }: any) => {
               <form id="share-form" onSubmit={onShareProfile} />
               <form id="profile-form" onSubmit={onSubmit}>
                 <div className="mb-4">
-                  <label htmlFor="name" className="text-sm block mb-1 text-neutral-600 font-medium">
+                  <label htmlFor="fullname" className="text-sm block mb-1 text-neutral-600 font-medium">
                     Full name
                   </label>
                   <input
                     required
-                    id="name"
-                    name="name"
+                    id="fullname"
                     type="text"
-                    defaultValue={profile.fullname}
+                    value={formValue.fullname}
+                    onChange={(e) => setFormValue({ ...formValue, fullname: e.target.value })}
                     className="bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
                   />
                 </div>
@@ -204,7 +209,8 @@ const ProfileForm = ({ profile, followers }: any) => {
                     id="bio"
                     name="bio"
                     rows={3}
-                    defaultValue={profile.bio}
+                    value={formValue.bio}
+                    onChange={(e) => setFormValue({ ...formValue, bio: e.target.value })}
                     className="bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500 [resize:none]"
                   />
                 </div>
@@ -213,9 +219,16 @@ const ProfileForm = ({ profile, followers }: any) => {
                   <div className="mb-2">
                     <Switch.Label className="text-sm block mb-1 text-neutral-600 font-medium">Make public</Switch.Label>
 
-                    <Switch name="is_public" defaultChecked={profile.is_public} as={Fragment}>
+                    <Switch
+                      name="is_public"
+                      value={formValue.is_public}
+                      onChange={(value) => setFormValue({ ...formValue, is_public: value })}
+                      as={Fragment}
+                    >
                       {({ checked }) => (
-                        <button
+                        <motion.button
+                          layout
+                          layoutRoot
                           className={cn("relative inline-flex h-6 w-11 p-1 items-center rounded-full", {
                             "bg-neutral-800 justify-end": checked,
                             "bg-neutral-300 justify-start": !checked,
@@ -231,14 +244,14 @@ const ProfileForm = ({ profile, followers }: any) => {
                             }}
                             className={cn(`inline-block h-4 w-4 transform rounded-full bg-white transition`)}
                           />
-                        </button>
+                        </motion.button>
                       )}
                     </Switch>
                     <span className="mt-1 block text-xs text-neutral-500">You can make your profile only visible to people you know</span>
                   </div>
                 </Switch.Group>
 
-                {!profile.is_public && (
+                {!formValue.is_public && (
                   <div className="mb-4">
                     <label className="text-sm block mb-1 text-neutral-500 font-medium">People with access</label>
 
@@ -268,7 +281,7 @@ const ProfileForm = ({ profile, followers }: any) => {
                           type="email"
                           placeholder="Email address"
                           form="share-form"
-                          className="text-sm bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
+                          className="bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
                         />
 
                         {shareState === "error" && <span className="text-xs text-red-600">Something went wrong please try again</span>}
@@ -279,7 +292,7 @@ const ProfileForm = ({ profile, followers }: any) => {
                         type="submit"
                         form="share-form"
                         disabled={sharing}
-                        className="inline-flex items-center justify-center text-sm rounded-lg px-3 py-1.5 bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
+                        className="inline-flex items-center justify-center text-sm rounded-lg px-3 py-2 bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
                       >
                         Share
                         {sharing && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
