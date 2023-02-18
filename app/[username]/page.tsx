@@ -9,7 +9,6 @@ import AddPost from "./components/add-post";
 
 import Posts from "./posts";
 
-// const days = groupBy(data, "date");
 const getProfile = async (username: string) => {
   const supabase = createClient();
 
