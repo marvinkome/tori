@@ -105,4 +105,6 @@ const Page = async ({ params }: any) => {
   );
 };
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
 export default Page;
