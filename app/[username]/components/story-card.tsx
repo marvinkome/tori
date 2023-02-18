@@ -222,15 +222,13 @@ const StoryCard = ({ title, date, tag, stories, className }: StoryCardProps) => 
         ref={setRootElement}
         onClick={() => setIsActive(true)}
         className={cn(
-          "relative col-span-1 bg-neutral-50 rounded-lg p-4 hover:bg-neutral-100 hover:scale-[0.97]",
+          "relative col-span-1 bg-neutral-50 rounded-lg p-3 hover:bg-neutral-100 hover:scale-[0.97]",
           "transition-transform duration-150 ease-in",
           className
         )}
       >
-        <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
+        <h3 className="font-serif text-xl text-neutral-700 font-light mb-1 font-serif-variation">{title}</h3>
         <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
-
-        {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>#{tag.name}</p>}
       </div>
 
       {isActive && (

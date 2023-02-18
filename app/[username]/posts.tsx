@@ -54,8 +54,7 @@ const Posts = async ({ profileId }: { profileId: string }) => {
                     date={item.date}
                     tag={{ name: item.tagName, color: item.tagColor }}
                     stories={item.stories}
-                    // HACK: Set the grid height based on the title number
-                    className={item.title.length > 60 ? "row-span-3" : "row-span-2"}
+                    className={item.title.length > 60 ? "row-span-2" : "row-span-1"}
                   />
                 );
               }
@@ -69,7 +68,7 @@ const Posts = async ({ profileId }: { profileId: string }) => {
                     tag={{ name: item.tagName, color: item.tagColor }}
                     images={item.images}
                     // HACK: Set the grid height based on the title number
-                    className={item.title.length > 60 ? "row-span-5" : "row-span-4"}
+                    className={item.title.length > 60 ? "row-span-3" : "row-span-2"}
                   />
                 );
               }
@@ -81,7 +80,7 @@ const Posts = async ({ profileId }: { profileId: string }) => {
                   date={item.date}
                   tag={{ name: item.tagName, color: item.tagColor }}
                   // HACK: Set the grid height based on the title number
-                  className={item.title.length > 60 ? "row-span-3" : "row-span-2"}
+                  className={item.title.length > 60 ? "row-span-2" : "row-span-1"}
                 />
               );
             })}

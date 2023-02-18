@@ -66,9 +66,9 @@ const Page = async ({ params }: any) => {
   const isFollower = (profile.followers as any).find((f: any) => f.follower.id === signedInProfile?.id);
 
   const isVisible = profile.is_public || isPageAuthor || isFollower;
-  if (!isVisible) {
-    return <RequestAccess />;
-  }
+  // if (!isVisible) {
+  //   return <RequestAccess />;
+  // }
 
   return (
     <main className="h-full relative flex flex-col">

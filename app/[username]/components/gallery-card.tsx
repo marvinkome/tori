@@ -27,16 +27,14 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
         animate={isActive ? { zIndex: 2 } : { zIndex: 1, transition: { delay: 0.2 } }}
         onClick={() => setIsActive(true)}
         className={cn(
-          "group relative col-span-1 w-full h-full bg-neutral-50 rounded-lg p-4 hover:bg-neutral-100 hover:scale-[0.97] flex flex-col",
+          "group relative col-span-1 w-full h-full bg-neutral-50 rounded-lg p-3 hover:bg-neutral-100 hover:scale-[0.97] flex flex-col",
           "transition-transform duration-150 ease-in",
           className
         )}
       >
         <div className="mb-2">
-          <h3 className="font-serif text-xl font-light mb-1 font-serif-variation">{title}</h3>
+          <h3 className="font-serif text-xl text-neutral-700 font-light mb-1 font-serif-variation">{title}</h3>
           <p className="text-sm text-neutral-400 font-light mb-3">{dayjs(date).format("DD MMM")}</p>
-
-          {tag && <p className={cn("text-xs px-1.5 py-1.5 inline-block rounded shadow", getTagColorClasses(tag.color))}>#{tag.name}</p>}
         </div>
 
         <div className="grow relative flex justify-center items-center h-full">
@@ -45,7 +43,7 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
               <motion.div
                 key={image}
                 layoutId={id + image}
-                className={cn("absolute w-[136px] h-[88px]")}
+                className={cn("absolute inset-0 mx-2")}
                 transition={{
                   delay: [0, 0.02, 0.04, 0.05][idx],
                   damping: 18,
@@ -58,18 +56,18 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
                     "w-full h-full rounded-md overflow-hidden shadow bg-[rgb(251_251_251)]",
                     "transition-transform duration-150 ease-in",
                     {
-                      "translate-x-[-30%] translate-y-[-40%] rotate-[-6deg] z-[1] group-hover:rotate-[-4deg]": idx === 0,
-                      "translate-x-[30%] translate-y-[-40%] rotate-[7deg] z-[2] group-hover:rotate-[5deg]": idx === 1,
-                      "translate-x-[-30%] translate-y-[44%] rotate-[5deg] z-[3] group-hover:rotate-[3deg]": idx === 2,
-                      "translate-x-[30%] translate-y-[44%] rotate-[-1deg] z-[4] group-hover:rotate-[-3deg]": idx === 3,
+                      "rotate-[3deg] z-[1] group-hover:rotate-[4deg]": idx === 0,
+                      "rotate-[-3deg] z-[2] group-hover:rotate-[-5deg]": idx === 1,
+                      "rotate-[2deg] z-[3] group-hover:rotate-[-2deg]": idx === 2,
+                      "rotate-[0deg] z-[4] group-hover:rotate-[1deg]": idx === 3,
                     }
                   )}
                 >
                   <Image
                     src={getPublicUrl(image)}
                     alt={`Images of "${title}"`}
-                    width={136}
-                    height={88}
+                    width={262}
+                    height={194}
                     priority
                     className="w-full h-full object-cover object-center"
                   />
