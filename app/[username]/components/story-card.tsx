@@ -4,12 +4,11 @@ import cn from "classnames";
 import Image from "next/image";
 import { AnimatePresence, motion, wrap } from "framer-motion";
 import { pausableTimeout } from "libs/utils";
+import { buildImage } from "@/libs/build-image";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useMedia } from "react-use";
-import { getTagColorClasses } from "./utils";
-import { useSupabase } from "@/libs/supabase";
 
 const swipeConfidenceThreshold = 1000;
 const swipePower = (offset: number, velocity: number) => {
@@ -35,8 +34,6 @@ const variants = {
 };
 
 const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
-  const { supabase } = useSupabase();
-
   let interval = 6000;
   const [timer, setTimer] = useState<any>();
   const [isPaused, setIsPaused] = useState(false);
@@ -47,14 +44,6 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
       setPage([page + newDirection, newDirection]);
     },
     [page]
-  );
-
-  const getPublicUrl = useCallback(
-    (url: string) => {
-      const { data } = supabase.storage.from("posts").getPublicUrl(url);
-      return data.publicUrl;
-    },
-    [supabase]
   );
 
   useEffect(() => {
@@ -133,10 +122,11 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
           onPointerLeave={() => onResume()}
           className="w-full h-full absolute rounded-lg overflow-hidden bg-cover bg-center"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={getPublicUrl(activeStory.image)}
+          <Image
+            {...buildImage(activeStory.image)}
             alt={activeStory.title || activeStory.content || "no-alt-text"}
+            width={300}
+            height={280}
             className="absolute w-full h-full object-cover object-center z-[-5]"
           />
 
@@ -174,7 +164,6 @@ const Stories = ({ stories }: { stories: StoryCardProps["stories"] }) => {
 type StoryCardProps = {
   title: string;
   date: string;
-  tag?: { name: string; color: string };
   className?: string;
   stories: {
     title?: string;
@@ -182,7 +171,7 @@ type StoryCardProps = {
     image: string;
   }[];
 };
-const StoryCard = ({ title, date, tag, stories, className }: StoryCardProps) => {
+const StoryCard = ({ title, date, stories, className }: StoryCardProps) => {
   const contentEl = useRef<HTMLDivElement>(null);
 
   const [rootElement, setRootElement] = useState<HTMLDivElement | null>(null);

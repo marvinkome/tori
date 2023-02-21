@@ -235,15 +235,19 @@ const Editor = ({ onClose }: any) => {
 
       if (formValue.type === "story") {
         const storyPromise = formValue.stories.map(async (story) => {
-          const filePath = `${currentUser.id}/story/${story.image.name}`;
-          const { error } = await supabase.storage.from("posts").upload(filePath, story.image, {
-            upsert: true,
-          });
+          const formData = new FormData();
+          formData.append("file", story.image);
+          formData.append("folder", `${currentUser.id}/story/`);
+          formData.append("upload_preset", "tori-preset");
 
-          if (error) throw error;
+          const data = await fetch("https://api.cloudinary.com/v1_1/marvinkome/image/upload", {
+            method: "POST",
+            body: formData,
+          }).then((r) => r.json());
+
           return {
             ...story,
-            image: filePath,
+            image: data.public_id,
           };
         });
 

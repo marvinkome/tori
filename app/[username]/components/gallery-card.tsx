@@ -4,7 +4,6 @@ import cn from "classnames";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { useId, useState } from "react";
-import { useSupabase } from "@/libs/supabase";
 import { buildImage } from "@/libs/build-image";
 
 type GalleryCardProps = { title: string; date: string; images: string[]; className?: string };
@@ -54,7 +53,6 @@ const GalleryCard = ({ title, date, images, className }: GalleryCardProps) => {
                     }
                   )}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <Image
                     {...buildImage(image)}
                     alt={`Images of "${title}"`}
