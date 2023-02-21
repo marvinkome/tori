@@ -8,6 +8,9 @@ const nextConfig = {
       {
         hostname: "igrkkmuriqdsbzbmhrzw.supabase.co",
       },
+      {
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
 };

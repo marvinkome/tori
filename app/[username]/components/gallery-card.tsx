@@ -3,23 +3,14 @@ import Image from "next/image";
 import cn from "classnames";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
-import { useCallback, useId, useState } from "react";
-import { getTagColorClasses } from "./utils";
+import { useId, useState } from "react";
 import { useSupabase } from "@/libs/supabase";
+import { buildImage } from "@/libs/build-image";
 
-type GalleryCardProps = { title: string; date: string; tag?: { name: string; color: string }; images: string[]; className?: string };
-const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) => {
+type GalleryCardProps = { title: string; date: string; images: string[]; className?: string };
+const GalleryCard = ({ title, date, images, className }: GalleryCardProps) => {
   const id = useId();
   const [isActive, setIsActive] = useState(false);
-  const { supabase } = useSupabase();
-
-  const getPublicUrl = useCallback(
-    (url: string) => {
-      const { data } = supabase.storage.from("posts").getPublicUrl(url);
-      return data.publicUrl;
-    },
-    [supabase]
-  );
 
   return (
     <>
@@ -28,7 +19,7 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
         onClick={() => setIsActive(true)}
         className={cn(
           "group relative col-span-1 w-full h-full bg-neutral-50 rounded-lg p-3 hover:bg-neutral-100 hover:scale-[0.97] flex flex-col",
-          "transition-transform duration-150 ease-in",
+          "transition-transform duration-150 ease-in cursor-pointer",
           className
         )}
       >
@@ -64,7 +55,14 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
                   )}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={getPublicUrl(image)} alt={`Images of "${title}"`} className="w-full h-full object-cover object-center" />
+                  <Image
+                    src={buildImage(image)}
+                    alt={`Images of "${title}"`}
+                    width={300}
+                    height={280}
+                    priority={idx === 3}
+                    className="w-full h-full object-cover object-center"
+                  />
                 </div>
               </motion.div>
             ))}
@@ -95,7 +93,7 @@ const GalleryCard = ({ title, date, tag, images, className }: GalleryCardProps) 
                   })}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={getPublicUrl(image)} alt={`Images of "${title}"`} className="w-full h-full object-cover object-center" />
+                  <img src={buildImage(image)} alt={`Images of "${title}"`} className="w-full h-full object-cover object-center" />
                 </div>
               </motion.div>
             ))}

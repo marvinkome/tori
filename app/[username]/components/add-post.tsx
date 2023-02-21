@@ -217,13 +217,17 @@ const Editor = ({ onClose }: any) => {
 
       if (formValue.type === "gallery") {
         const imagesPromise = formValue.images.map(async (file) => {
-          const filePath = `${currentUser.id}/gallery/${file.name}`;
-          const { error } = await supabase.storage.from("posts").upload(filePath, file, {
-            upsert: true,
-          });
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("folder", `${currentUser.id}/gallery/`);
+          formData.append("upload_preset", "tori-preset");
 
-          if (error) throw error;
-          return filePath;
+          const data = await fetch("https://api.cloudinary.com/v1_1/marvinkome/image/upload", {
+            method: "POST",
+            body: formData,
+          }).then((r) => r.json());
+
+          return data.public_id;
         });
 
         payload.images = await Promise.all(imagesPromise);

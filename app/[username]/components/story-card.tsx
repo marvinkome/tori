@@ -220,7 +220,7 @@ const StoryCard = ({ title, date, tag, stories, className }: StoryCardProps) => 
         onClick={() => setIsActive(true)}
         className={cn(
           "relative col-span-1 bg-neutral-50 rounded-lg p-3 hover:bg-neutral-100 hover:scale-[0.97]",
-          "transition-transform duration-150 ease-in",
+          "transition-transform duration-150 ease-in cursor-pointer",
           className
         )}
       >
