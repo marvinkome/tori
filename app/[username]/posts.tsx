@@ -28,7 +28,6 @@ const getPosts = async (profileId: string) => {
     .eq("author.id", profileId)
     .order("date", { ascending: false });
 
-  console.log(profileResponse);
   return profileResponse.data;
 };
 

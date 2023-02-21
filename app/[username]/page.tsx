@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createClient } from "@/libs/supabase/server";
 import { notFound } from "next/navigation";
 
@@ -98,8 +99,10 @@ const Page = async ({ params }: any) => {
       </header>
 
       <div className="grow">
-        {/* @ts-expect-error Server Component */}
-        <Posts profileId={profile.id} />
+        <Suspense>
+          {/* @ts-expect-error Server Component */}
+          <Posts profileId={profile.id} />
+        </Suspense>
       </div>
     </main>
   );
