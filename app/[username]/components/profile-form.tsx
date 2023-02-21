@@ -221,7 +221,7 @@ const ProfileForm = ({ profile, followers }: any) => {
 
                     <Switch
                       name="is_public"
-                      value={formValue.is_public}
+                      checked={formValue.is_public}
                       onChange={(value) => setFormValue({ ...formValue, is_public: value })}
                       as={Fragment}
                     >
@@ -281,7 +281,7 @@ const ProfileForm = ({ profile, followers }: any) => {
                           type="email"
                           placeholder="Email address"
                           form="share-form"
-                          className="bg-neutral-100 w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
+                          className="bg-neutral-100 lg:text-sm w-full py-1.5 px-3 rounded-md hover:bg-[#f0f0f0] placeholder:text-neutral-500"
                         />
 
                         {shareState === "error" && <span className="text-xs text-red-600">Something went wrong please try again</span>}
@@ -292,7 +292,7 @@ const ProfileForm = ({ profile, followers }: any) => {
                         type="submit"
                         form="share-form"
                         disabled={sharing}
-                        className="inline-flex items-center justify-center text-sm rounded-lg px-3 py-2 bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
+                        className="inline-flex items-center justify-center text-sm rounded-lg px-3 lg:py-1.5 py-2 bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
                       >
                         Share
                         {sharing && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}

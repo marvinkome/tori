@@ -75,7 +75,7 @@ const Page = async ({ params }: any) => {
       <header className="flex items-baseline justify-between px-4 py-4 lg:px-10 lg:py-6">
         <div>
           <h1 className="font-serif text-2xl md:text-4xl font-semibold text-neutral-900 mb-1">{profile.fullname}</h1>
-          <p className="hidden lg:block font-light text-neutral-500 ml-[2px]">{profile.bio}</p>
+          <p className="hidden lg:block font-light text-sm text-neutral-500 ml-[2px]">{profile.bio}</p>
         </div>
 
         <div className="flex space-x-2 md:space-x-4 items-center">
