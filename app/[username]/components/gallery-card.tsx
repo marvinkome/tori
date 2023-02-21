@@ -56,7 +56,7 @@ const GalleryCard = ({ title, date, images, className }: GalleryCardProps) => {
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <Image
-                    src={buildImage(image)}
+                    {...buildImage(image)}
                     alt={`Images of "${title}"`}
                     width={300}
                     height={280}
@@ -93,7 +93,13 @@ const GalleryCard = ({ title, date, images, className }: GalleryCardProps) => {
                   })}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={buildImage(image)} alt={`Images of "${title}"`} className="w-full h-full object-cover object-center" />
+                  <Image
+                    {...buildImage(image)}
+                    width={460}
+                    height={280}
+                    alt={`Images of "${title}"`}
+                    className="w-full h-full object-cover object-center"
+                  />
                 </div>
               </motion.div>
             ))}
