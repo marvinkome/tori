@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 export const Day = ({ children, date }: { date: string; children: React.ReactNode }) => {
   return (
     <section className="w-[65vw] md:w-[40vw] lg:w-[20vw] h-full flex flex-col">
-      <header className="border-br text-center pb-4 pt-5 md:pt-2">
+      <header className="border-br text-center pb-4 md:pt-2">
         <p className="font-medium text-sm font-serif">{dayjs(date).format("MMM DD")}</p>
         <p className="text-xs text-slate-400">{dayjs(date).format("YYYY")}</p>
       </header>
@@ -38,7 +38,10 @@ export const Calendar = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full overflow-y-hidden overflow-x-auto [&::-webkit-scrollbar]:hidden">
+    <div
+      ref={containerRef}
+      className="relative w-full h-full overflow-y-hidden overflow-x-auto [&::-webkit-scrollbar]:hidden"
+    >
       <div className="absolute top-0 bottom-0 left-0 flex">
         {React.Children.count(children)
           ? children
