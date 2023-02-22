@@ -1,18 +1,19 @@
+import futChamps from "public/fut-champs.png";
+import Image from "next/image";
+
 const FutCard = () => {
   return (
-    <div className="relative shadow shadow-red-50 bg-red-50 rounded-lg p-3 transition-all duration-150 ease-in hover:bg-red-100 hover:scale-[0.97]">
-      <div className="flex items-center">
-        <h3 className="font-serif text-xl text-neutral-700 font-light font-serif-variation mb-4">Rank 4</h3>
-        <div className="ml-auto flex space-x-4">
-          <div className="text-center">
-            <p className="font-semibold text-2xl">12</p>
-            <p className="font-serif font-light font-serif-variation">Wins</p>
-          </div>
+    <div className="relative shadow bg-[#fef3ec] rounded-lg p-3 transition-transform duration-150 ease-in hover:bg-neutral-100 hover:scale-[0.97]">
+      <h3 className="font-serif text-xl font-light mb-2 font-serif-variation">Weekend League</h3>
 
-          <div className="text-center">
-            <p className="font-semibold text-2xl">8</p>
-            <p className="font-serif font-light font-serif-variation">Loss</p>
-          </div>
+      <div className="flex items-center">
+        <div className="mr-3">
+          <Image src={futChamps} alt="Song name" width={35} className="w-full rounded-lg" />
+        </div>
+
+        <div>
+          <p className="font-semibold text-sm line-clamp-1">Rank V</p>
+          <p className="font-medium text-xs line-clamp-1">51 points</p>
         </div>
       </div>
     </div>
