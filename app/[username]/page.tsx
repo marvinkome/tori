@@ -8,8 +8,6 @@ import ProfileForm from "./components/profile-form";
 import AddPost from "./components/add-post";
 
 import Posts from "./posts";
-import CmdMenu from "@/components/cmd-menu";
-import { IoIosAdd } from "react-icons/io";
 
 const getProfile = async (username: string) => {
   const supabase = createClient();
@@ -83,13 +81,7 @@ const Page = async ({ params }: any) => {
         <div className="flex space-x-2 md:space-x-4 items-center">
           {isPageAuthor && (
             <>
-              <CmdMenu>
-                <button className="inline-flex items-center text-xs text-neutral-600 border border-neutral-200 p-1 sm:px-3 py-1 rounded-full sm:rounded-lg hover:shadow-sm">
-                  <IoIosAdd className="text-base" />
-                  <span className="hidden sm:inline ml-1">Add post</span>
-                </button>
-              </CmdMenu>
-
+              <AddPost />
               <ProfileForm profile={signedInProfile} followers={profile.followers} />
             </>
           )}
