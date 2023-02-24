@@ -5,7 +5,7 @@ import Calendar from "./components/calendar";
 import Day from "./components/day";
 import NoteCard from "./components/note-card";
 import ImageCard from "./cards/image";
-import StoryCard from "./components/story-card";
+import StoryCard from "./cards/story";
 
 const getPosts = async (profileId: string) => {
   const supabase = createClient();
