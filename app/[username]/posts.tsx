@@ -4,7 +4,7 @@ import { createClient } from "@/libs/supabase/server";
 import Calendar from "./components/calendar";
 import Day from "./components/day";
 import NoteCard from "./components/note-card";
-import GalleryCard from "./components/gallery-card";
+import ImageCard from "./cards/image";
 import StoryCard from "./components/story-card";
 
 const getPosts = async (profileId: string) => {
@@ -56,7 +56,7 @@ const Posts = async ({ profileId }: { profileId: string }) => {
 
               if (item.type === "gallery") {
                 return (
-                  <GalleryCard
+                  <ImageCard
                     key={idx}
                     title={item.title}
                     date={item.date}

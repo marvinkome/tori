@@ -1,17 +1,16 @@
 "use client";
+import dayjs from "dayjs";
 import Image from "next/image";
-import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
-import { BsImage } from "react-icons/bs";
-import { useEffect, useRef, useState } from "react";
-
-import image1 from "public/story-1.jpg";
-import image2 from "public/story-2.png";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { BsImage } from "react-icons/bs";
+import { startTransition, useEffect, useRef, useState } from "react";
+import { useSupabase } from "@/libs/supabase";
+import { useRouter } from "next/navigation";
 
-const ImageSlider = () => {
+const ImageSlider = ({ images }: { images: string[] }) => {
   const [activeIdx, setActiveIdx] = useState(0);
-  const images = [image1, image2];
 
   const paginate = (newDirection: number) => {
     setActiveIdx((idx) => idx + newDirection);
@@ -21,7 +20,13 @@ const ImageSlider = () => {
 
   return (
     <div className="relative select-none flex items-start">
-      <Image src={activeImage} alt="Gallery photo" className="aspect-square object-cover rounded-lg select-none shadow" />
+      <Image
+        src={activeImage}
+        alt="Gallery photo"
+        width={270}
+        height={270}
+        className="aspect-square object-cover rounded-lg select-none shadow"
+      />
 
       <div className="absolute left-0 bottom-0 z-10 p-2 pb-3">
         <div className="flex items-center space-x-2">
@@ -46,10 +51,27 @@ const ImageSlider = () => {
   );
 };
 
-const AddImage = ({ goBack }: any) => {
+const AddImage = ({ goBack, closeModal }: any) => {
+  const router = useRouter();
+  const { supabase, session } = useSupabase();
+
+  const [formValue, setFormValue] = useState({
+    title: "",
+    date: "",
+  });
+
   const [images, setImages] = useState<FileList>();
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const imageRef = useRef<HTMLInputElement>(null);
+
+  const [error, setError] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      imagesPreview.map((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagesPreview]);
 
   const onImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -59,11 +81,52 @@ const AddImage = ({ goBack }: any) => {
     setImages(files);
   };
 
-  useEffect(() => {
-    return () => {
-      imagesPreview.map((url) => URL.revokeObjectURL(url));
-    };
-  }, [imagesPreview]);
+  const submitForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(undefined);
+    if (!images || !images.length) return;
+
+    try {
+      setIsLoading(true);
+
+      const currentUser = session?.user!;
+      const payload: any = {
+        author: currentUser.id,
+        title: formValue.title,
+        type: "gallery",
+        date: formValue.date,
+      };
+
+      const imagesPromise = Array.from(images).map(async (file) => {
+        const formData = new FormData();
+
+        formData.append("file", file);
+        formData.append("folder", `${currentUser.id}/gallery/`);
+        formData.append("upload_preset", "tori-preset");
+
+        const data = await fetch("https://api.cloudinary.com/v1_1/marvinkome/image/upload", {
+          method: "POST",
+          body: formData,
+        }).then((r) => r.json());
+
+        return data.public_id;
+      });
+      payload.images = await Promise.all(imagesPromise);
+
+      let { error } = await supabase.from("posts").insert(payload);
+      if (error) {
+        throw error;
+      }
+
+      startTransition(() => router.refresh());
+      closeModal();
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong. Please try again");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="p-2 w-full min-h-[320px] flex flex-col">
@@ -100,18 +163,19 @@ const AddImage = ({ goBack }: any) => {
       {!!images?.length && (
         <div className="grow flex flex-col sm:flex-row pt-2 space-y-4 sm:space-y-0 sm:space-x-4">
           <div className="w-full sm:w-2/4">
-            <ImageSlider />
+            <ImageSlider images={imagesPreview} />
           </div>
 
-          <div className="w-full sm:w-2/4 flex flex-col">
+          <form onSubmit={submitForm} className="w-full sm:w-2/4 flex flex-col">
             <div className="mb-4">
               <label htmlFor="title" className="text-sm block mb-1 text-neutral-600 font-medium">
                 Caption
               </label>
               <input
-                required
                 id="caption"
                 type="text"
+                value={formValue.title}
+                onChange={(e) => setFormValue({ ...formValue, title: e.target.value })}
                 className="bg-neutral-100 w-full py-1.5 px-3 rounded-md resize-none hover:bg-[#f0f0f0] placeholder:text-neutral-500"
               />
             </div>
@@ -124,22 +188,26 @@ const AddImage = ({ goBack }: any) => {
                 required
                 id="date"
                 type="date"
+                max={dayjs().format("YYYY-MM-DD")}
+                value={formValue.date}
+                onChange={(e) => setFormValue({ ...formValue, date: e.target.value })}
                 className="bg-neutral-100 w-full py-1.5 px-3 rounded-md resize-none hover:bg-[#f0f0f0] placeholder:text-neutral-500"
               />
             </div>
 
             <div className="w-full mt-auto text-right mb-2 flex justify-between items-center space-x-2">
-              {/* <p className="mt-1 text-sm text-red-400">Something went wrong</p> */}
+              {error && <p className="mt-1 text-sm text-red-400">{error}</p>}
 
               <button
                 type="submit"
+                disabled={isLoading}
                 className="ml-auto inline-flex items-center justify-center bg-neutral-900 text-sm text-white rounded-lg px-3 py-1.5 hover:bg-neutral-800 active:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:bg-neutral-600"
               >
                 Save
-                {false && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
+                {isLoading && <AiOutlineLoading3Quarters className="animate-spin ml-2" />}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       )}
     </div>
